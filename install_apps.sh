@@ -24,9 +24,11 @@ sudo apt-get install mysql-server -y
 wget https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community_8.0.28-1ubuntu20.04_amd64.deb
 sudo dpkg -i mysql-workbench-community_8.0.28-1ubuntu20.04_amd64.deb
 
-# Limpeza
-rm mysql-apt-config_0.8.16-1_all.deb mysql-workbench-community_8.0.28-1ubuntu20.04_amd64.deb
+# instal MVN
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
+# Install Node LTS
+nvm install --lts
 
 # Download do arquivo .deb do Google Chrome
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -66,7 +68,7 @@ sudo dpkg -i hero_games.deb
 sudo apt-get install -f -y
 
 # Remover os arquivos .deb após a instalação (opcional)
-rm discord.deb gimp.deb telegram.deb hero_games.deb google-chrome-stable_current_amd64.deb
+rm discord.deb gimp.deb telegram.deb hero_games.deb google-chrome-stable_current_amd64.deb mysql-apt-config_0.8.16-1_all.deb mysql-workbench-community_8.0.28-1ubuntu20.04_amd64.deb
 
 
 #install flatpak
@@ -75,10 +77,7 @@ sudo apt install gnome-software-plugin-flatpak -y
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 # install themes remix
-git clone https://github.com/daniruiz/flat-remix
-git clone https://github.com/daniruiz/flat-remix-gtk
-mkdir -p ~/.icons && mkdir -p ~/.themes
-cp -r flat-remix/Flat-Remix* ~/.icons/ && cp -r flat-remix-gtk/Flat-Remix-GTK* ~/.themes/
+sudo add-apt-repository ppa:daniruiz/flat-remix -y && sudo apt-get update && sudo apt-get install flat-remix-gtk -y && sudo apt-get install flat-remix -y
 
 
 # Instalar aplicativos flatpak
