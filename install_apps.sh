@@ -21,10 +21,39 @@ wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo dpkg -i google-chrome-stable_current_amd64.deb
 
 # Se houver dependências não satisfeitas, você pode corrigi-las com o seguinte comando
-sudo apt-get install -f
+sudo apt-get install -f -y
 
-# Remover o arquivo .deb após a instalação (opcional)
-rm google-chrome-stable_current_amd64.deb
+# Download do Discord
+wget -O discord.deb "https://discord.com/api/download?platform=linux&format=deb"
+
+# Instalação do Discord
+sudo dpkg -i discord.deb
+sudo apt-get install -f -y
+
+# Download do Gimp
+wget -O gimp.deb "https://download.gimp.org/pub/gimp/v2.10/gimp-2.10.30-x86_64.deb"
+
+# Instalação do Gimp
+sudo dpkg -i gimp.deb
+sudo apt-get install -f -y
+
+# Download do Telegram
+wget -O telegram.deb "https://telegram.org/dl/desktop/linux"
+
+# Instalação do Telegram
+sudo dpkg -i telegram.deb
+sudo apt-get install -f -y
+
+# Download do Hero Games
+wget -O hero_games.deb "https://heroicgameslauncher.com/HeroicGamesLauncher_latest_amd64.deb"
+
+# Instalação do Hero Games
+sudo dpkg -i hero_games.deb
+sudo apt-get install -f -y
+
+# Remover os arquivos .deb após a instalação (opcional)
+rm discord.deb gimp.deb telegram.deb hero_games.deb google-chrome-stable_current_amd64.deb
+
 
 #install flatpak
 sudo apt install flatpak -y
@@ -44,19 +73,6 @@ sudo apt install gnome-tweaks fonts-hack-ttf -y
 
 # InteliJ
 flatpak install flathub com.jetbrains.IntelliJ-IDEA-Community -y
-
-#Discord
-flatpak install flathub com.discordapp.Discord -y
-
-# Gimp
-flatpak install flathub org.gimp.GIMP -y
-
-# Telegram
-flatpak install flathub org.telegram.desktop -y
-
-
-#Hero Games
-flatpak install flathub com.heroicgameslauncher.hgl -y
 
 # WhatsApp
 flatpak install flathub io.github.mimbrero.WhatsAppDesktop -y
