@@ -14,6 +14,20 @@ sudo apt install git -y
 # install font-hack
 sudo apt-get install fonts-hack-ttf -y
 
+# Instalação do MySQL
+wget https://dev.mysql.com/get/mysql-apt-config_0.8.16-1_all.deb
+sudo dpkg -i mysql-apt-config_0.8.16-1_all.deb
+sudo apt-get update
+sudo apt-get install mysql-server -y
+
+# Instalação do MySQL Workbench
+wget https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community_8.0.28-1ubuntu20.04_amd64.deb
+sudo dpkg -i mysql-workbench-community_8.0.28-1ubuntu20.04_amd64.deb
+
+# Limpeza
+rm mysql-apt-config_0.8.16-1_all.deb mysql-workbench-community_8.0.28-1ubuntu20.04_amd64.deb
+
+
 # Download do arquivo .deb do Google Chrome
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 
@@ -66,8 +80,6 @@ git clone https://github.com/daniruiz/flat-remix-gtk
 mkdir -p ~/.icons && mkdir -p ~/.themes
 cp -r flat-remix/Flat-Remix* ~/.icons/ && cp -r flat-remix-gtk/Flat-Remix-GTK* ~/.themes/
 
-# install font hack
-sudo apt install gnome-tweaks fonts-hack-ttf -y
 
 # Instalar aplicativos flatpak
 
