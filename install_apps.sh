@@ -15,20 +15,15 @@ sudo apt install git -y
 sudo apt-get install fonts-hack-ttf -y
 
 # Instalação do MySQL
-wget https://dev.mysql.com/get/mysql-apt-config_0.8.16-1_all.deb
-sudo dpkg -i mysql-apt-config_0.8.16-1_all.deb
-sudo apt-get update
-sudo apt-get install mysql-server -y
+sudo apt install mysql-client-core-8.0
 
 # Instalação do MySQL Workbench
 wget https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community_8.0.28-1ubuntu20.04_amd64.deb
 sudo dpkg -i mysql-workbench-community_8.0.28-1ubuntu20.04_amd64.deb
 
 # instal MVN
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
-# Install Node LTS
-nvm install --lts
 
 # Download do arquivo .deb do Google Chrome
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -44,27 +39,6 @@ wget -O discord.deb "https://discord.com/api/download?platform=linux&format=deb"
 
 # Instalação do Discord
 sudo dpkg -i discord.deb
-sudo apt-get install -f -y
-
-# Download do Gimp
-wget -O gimp.deb "https://download.gimp.org/pub/gimp/v2.10/gimp-2.10.30-x86_64.deb"
-
-# Instalação do Gimp
-sudo dpkg -i gimp.deb
-sudo apt-get install -f -y
-
-# Download do Telegram
-wget -O telegram.deb "https://telegram.org/dl/desktop/linux"
-
-# Instalação do Telegram
-sudo dpkg -i telegram.deb
-sudo apt-get install -f -y
-
-# Download do Hero Games
-wget -O hero_games.deb "https://heroicgameslauncher.com/HeroicGamesLauncher_latest_amd64.deb"
-
-# Instalação do Hero Games
-sudo dpkg -i hero_games.deb
 sudo apt-get install -f -y
 
 # Remover os arquivos .deb após a instalação (opcional)
