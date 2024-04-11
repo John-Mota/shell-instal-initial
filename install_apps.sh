@@ -44,7 +44,8 @@ sudo apt-get install -f -y
 # Remover os arquivos .deb após a instalação (opcional)
 rm discord.deb gimp.deb telegram.deb hero_games.deb google-chrome-stable_current_amd64.deb mysql-apt-config_0.8.16-1_all.deb mysql-workbench-community_8.0.28-1ubuntu20.04_amd64.deb
 
-
+# Flat-Remix
+sudo add-apt-repository ppa:daniruiz/flat-remix -y && sudo apt-get update && sudo apt-get install flat-remix-gtk -y && sudo apt-get install flat-remix -y
 #install flatpak
 sudo apt install flatpak -y
 sudo apt install gnome-software-plugin-flatpak -y
