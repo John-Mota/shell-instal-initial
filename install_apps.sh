@@ -8,6 +8,9 @@ sudo apt upgrade -y
 # Install curl
 sudo apt install curl -y
 
+# Ajustar Hora
+timedatectl set-local-rtc 1
+
 # Install git
 sudo apt install git -y
 
@@ -15,7 +18,7 @@ sudo apt install git -y
 sudo apt-get install fonts-hack-ttf -y
 
 # MySQL Installation
-sudo apt install mysql-client-core-8.0
+sudo apt install mysql-client-core-8.0 -y
 
 # MySQL Workbench Installation
 wget https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community_8.0.28-1ubuntu20.04_amd64.deb
@@ -43,12 +46,11 @@ sudo apt-get install -f -y
 # Install VSCode
 wget "https://go.microsoft.com/fwlink/?LinkID=760868" -O vscode.deb
 sudo dpkg -i vscode.deb
-sudo apt install -f
+sudo apt install -f -y
 # Remove .deb files after installation (optional)
 rm discord.deb gimp.deb telegram.deb hero_games.deb google-chrome-stable_current_amd64.deb mysql-apt-config_0.8.16-1_all.deb mysql-workbench-community_8.0.28-1ubuntu20.04_amd64.deb
 
-# Flat-Remix Theme
-sudo add-apt-repository ppa:daniruiz/flat-remix -y && sudo apt-get update && sudo apt-get install flat-remix-gtk -y && sudo apt-get install flat-remix -y
+
 # Install flatpak
 sudo apt install flatpak -y
 sudo apt install gnome-software-plugin-flatpak -y
