@@ -20,10 +20,14 @@ sudo apt-get install fonts-hack-ttf -y
 # MySQL Installation
 sudo apt install mysql-client-core-8.0 -y
 
-# MySQL Workbench Installation
-wget https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community_8.0.28-1ubuntu20.04_amd64.deb
-sudo dpkg -i mysql-workbench-community_8.0.28-1ubuntu20.04_amd64.deb
+# Java Development Kit
+sudo apt-get -y install openjdk-17-jdk -y
+ 
+ # workbench
+ sudo apt install mysql-workbench -y
 
+# PostgresQL
+sudo apt install postgresql -y
 # install NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
@@ -55,9 +59,6 @@ rm discord.deb gimp.deb telegram.deb hero_games.deb google-chrome-stable_current
 sudo apt install flatpak -y
 sudo apt install gnome-software-plugin-flatpak -y
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-
-# Install Remix themes
-sudo add-apt-repository ppa:daniruiz/flat-remix -y && sudo apt-get update && sudo apt-get install flat-remix-gtk -y && sudo apt-get install flat-remix -y
 
 # Install flatpak applications
 
