@@ -1,4 +1,0 @@
-titlebutton
-minimize
-maximize
-close
