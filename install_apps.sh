@@ -11,20 +11,31 @@ sudo apt install curl -y
 # Ajustar Hora
 timedatectl set-local-rtc 1
 
+# Instalar build-essential
+sudo apt-get install build-essential
+
 # Install git
 sudo apt install git -y
 
-# Install Hack font
-sudo apt-get install fonts-hack-ttf -y
+# Install Docker
 
-# MySQL Installation
-sudo apt install mysql-client-core-8.0 -y
+sudo apt-get install \ ca-certificates \ curl \ gnupg \ lsb-release
+
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+echo \
+ "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+ $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
 
 # Java Development Kit
-sudo apt-get -y install openjdk-17-jdk -y
+sudo apt-get -y install openjdk-11-jdk -y
  
- # workbench
- sudo apt install mysql-workbench -y
 
 # PostgresQL
 sudo apt install postgresql -y
@@ -71,5 +82,33 @@ flatpak install flathub io.github.mimbrero.WhatsAppDesktop -y
 # Nintendo Emulator
 flatpak install flathub org.ryujinx.Ryujinx -y
 
+
+mkdir -p ~/.themes
+mkdir -p ~/.icons
+
+# Mover arquivos .zip da pasta assets para a home
+mv ~/assets/Marble-blue-dark.zip ~/
+mv ~/assets/Flat-Remix-GTK-Blue-Dark.zip ~/
+mv ~/assets/Flat-Remix-Blue-Dark.zip ~/
+
+# Extrair arquivos .zip nas pastas apropriadas
+unzip ~/Marble-blue-dark.zip -d ~/.themes
+unzip ~/Flat-Remix-GTK-Blue-Dark.zip -d ~/.themes
+unzip ~/Flat-Remix-Blue-Dark.zip -d ~/.icons
+
+# Navegar até a pasta assets/dependencies
+cd ~/assets/dependencies
+
+# Instalar os pacotes na ordem correta
+sudo dpkg -i 1-gconf2-common_3.2.6-7ubuntu2_all.deb
+sudo dpkg -i 2-libgconf-2-4_3.2.6-7ubuntu2_amd64.deb
+sudo dpkg -i 3-libayatana-indicator7_0.9.1-1_amd64.deb
+sudo dpkg -i 4-libdbusmenu-gtk4_16.04.1+18.10.20180917-0ubuntu8_amd64.deb
+sudo dpkg -i 5-libldap-2.5-0_2.5.16+dfsg-0ubuntu0.22.04.2_amd64.deb
+sudo dpkg -i 6-libappindicator1_12.10.1+20.10.20200706.1-0ubuntu1_amd64.deb
+sudo dpkg -i 7-libayatana-appindicator1_0.5.90-7ubuntu2_amd64.deb
+
+# Corrigir possíveis dependências ausentes
+sudo apt-get install -f
 # Display completion message
 echo "Installation completed."
