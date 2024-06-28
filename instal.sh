@@ -89,6 +89,9 @@ flatpak install flathub dev.aunetx.deezer -y
 # OnlyOffice
 flatpak install flathub org.onlyoffice.desktopeditors -y
 
+# Postman
+flatpak install flathub com.getpostman.Postman -y
+
 
 mkdir -p ~/.themes
 mkdir -p ~/.icons
