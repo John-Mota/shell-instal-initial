@@ -39,6 +39,7 @@ sudo apt-get -y install openjdk-11-jdk -y
 
 # PostgresQL
 sudo apt install postgresql -y
+
 # install NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
@@ -79,25 +80,28 @@ flatpak install flathub com.jetbrains.IntelliJ-IDEA-Community -y
 # WhatsApp
 flatpak install flathub io.github.mimbrero.WhatsAppDesktop -y
 
-# Nintendo Emulator
-flatpak install flathub org.ryujinx.Ryujinx -y
+# Extensões
+flatpak install flathub com.mattjakeman.ExtensionManager -y
+
+# Deezer
+flatpak install flathub dev.aunetx.deezer -y
+
+# OnlyOffice
+flatpak install flathub org.onlyoffice.desktopeditors -y
 
 
 mkdir -p ~/.themes
 mkdir -p ~/.icons
 
-# Mover arquivos .zip da pasta assets para a home
-mv ~/assets/Marble-blue-dark.zip ~/
-mv ~/assets/Flat-Remix-GTK-Blue-Dark.zip ~/
-mv ~/assets/Flat-Remix-Blue-Dark.zip ~/
+
 
 # Extrair arquivos .zip nas pastas apropriadas
-unzip ~/Marble-blue-dark.zip -d ~/.themes
-unzip ~/Flat-Remix-GTK-Blue-Dark.zip -d ~/.themes
-unzip ~/Flat-Remix-Blue-Dark.zip -d ~/.icons
+unzip /Marble-blue-dark.zip -d ~/.themes
+unzip /Flat-Remix-GTK-Blue-Dark.zip -d ~/.themes
+unzip /Flat-Remix-Blue-Dark.zip -d ~/.icons
 
 # Navegar até a pasta assets/dependencies
-cd ~/assets/dependencies
+cd /assets/dependencies
 
 # Instalar os pacotes na ordem correta
 sudo dpkg -i 1-gconf2-common_3.2.6-7ubuntu2_all.deb
