@@ -93,19 +93,6 @@ flatpak install flathub org.onlyoffice.desktopeditors -y
 flatpak install flathub com.getpostman.Postman -y
 
 
-mkdir -p ~/.themes
-mkdir -p ~/.icons
-
-
-
-# Extrair arquivos .zip nas pastas apropriadas
-unzip /Marble-blue-dark.zip -d ~/.themes
-unzip /Flat-Remix-GTK-Blue-Dark.zip -d ~/.themes
-unzip /Flat-Remix-Blue-Dark.zip -d ~/.icons
-
-# Navegar até a pasta assets/dependencies
-cd /assets/dependencies
-
 # Instalar os pacotes na ordem correta
 sudo dpkg -i 1-gconf2-common_3.2.6-7ubuntu2_all.deb
 sudo dpkg -i 2-libgconf-2-4_3.2.6-7ubuntu2_amd64.deb
