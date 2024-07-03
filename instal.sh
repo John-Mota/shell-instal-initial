@@ -77,6 +77,8 @@ sudo apt install -f -y
 # Remove .deb files after installation (optional)
 rm discord.deb gimp.deb telegram.deb hero_games.deb google-chrome-stable_current_amd64.deb mysql-apt-config_0.8.16-1_all.deb mysql-workbench-community_8.0.28-1ubuntu20.04_amd64.deb
 
+# Install Tweak-tool
+sudo apt install gnome-tweaks -y
 
 # Install flatpak
 sudo apt install flatpak -y
