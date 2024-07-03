@@ -70,6 +70,7 @@ wget -O discord.deb "https://discord.com/api/download?platform=linux&format=deb"
 sudo dpkg -i discord.deb
 sudo apt-get install -f -y
 
+
 # Install VSCode
 wget "https://go.microsoft.com/fwlink/?LinkID=760868" -O vscode.deb
 sudo dpkg -i vscode.deb
@@ -115,5 +116,10 @@ sudo dpkg -i 7-libayatana-appindicator1_0.5.90-7ubuntu2_amd64.deb
 
 # Corrigir possíveis dependências ausentes
 sudo apt-get install -f
+
+# Install Fortnet
+wget -O fortnet.deb "https://links.fortinet.com/forticlient/deb/vpnagent"
+sudo dpkg -i fortnet.deb
+sudo apt-get install -f -y
 # Display completion message
 echo "Installation completed."
