@@ -40,6 +40,17 @@ sudo apt-get -y install openjdk-11-jdk -y
 # PostgresQL
 sudo apt install postgresql -y
 
+# Instalar Edge
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+sudo install -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/
+sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge.list'
+rm microsoft.gpg
+
+sudo apt update
+
+sudo apt install microsoft-edge-stable
+
+
 # install NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
@@ -74,8 +85,6 @@ flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.f
 
 # Install flatpak applications
 
-# InteliJ
-flatpak install flathub com.jetbrains.IntelliJ-IDEA-Community -y
 
 # WhatsApp
 flatpak install flathub io.github.mimbrero.WhatsAppDesktop -y
