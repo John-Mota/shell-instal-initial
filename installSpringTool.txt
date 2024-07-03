@@ -1,0 +1,21 @@
+cd Downloads
+
+sudo tar zxvf spring-tool-suite-4–4.19.1.RELEASE-e4.28.0-linux.gtk.x86_64.tar.gz
+
+sudo mv sts-4.19.1.RELEASE/ /opt/SpringToolSuite
+
+cd /opt/
+
+sudo ln -s /opt/SpringToolSuite/SpringToolSuite4 /usr/local/bin/sts
+
+sudo nano /usr/share/applications/stsLauncher.desktop
+
+[Desktop Entry]
+Name=Spring Tool Suite
+Comment=Spring Tool Suite 4.19.1
+Exec=/opt/SpringToolSuite/SpringToolSuite4
+Icon=/opt/SpringToolSuite/icon.xpm
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Development;IDE;Java;
