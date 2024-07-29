@@ -102,9 +102,10 @@ flatpak install flathub dev.aunetx.deezer -y
 flatpak install flathub org.onlyoffice.desktopeditors -y
 
 # Postman
-flatpak install flathub com.getpostman.Postman -y
+sudo snap install postman -y
 
-
+# DBeaver Community
+flatpak install flathub io.dbeaver.DBeaverCommunity -y
 # Instalar os pacotes na ordem correta
 sudo dpkg -i 1-gconf2-common_3.2.6-7ubuntu2_all.deb
 sudo dpkg -i 2-libgconf-2-4_3.2.6-7ubuntu2_amd64.deb
