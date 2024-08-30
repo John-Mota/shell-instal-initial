@@ -106,6 +106,7 @@ sudo snap install postman -y
 
 # DBeaver Community
 flatpak install flathub io.dbeaver.DBeaverCommunity -y
+
 # Instalar os pacotes na ordem correta
 sudo dpkg -i 1-gconf2-common_3.2.6-7ubuntu2_all.deb
 sudo dpkg -i 2-libgconf-2-4_3.2.6-7ubuntu2_amd64.deb
@@ -122,5 +123,20 @@ sudo apt-get install -f
 wget -O fortnet.deb "https://links.fortinet.com/forticlient/deb/vpnagent"
 sudo dpkg -i fortnet.deb
 sudo apt-get install -f -y
+
+echo 'export NODE_OPTIONS="--max-old-space-size=8192"' >> ~/.bashrc
+
+echo 'parse_git_branch() {
+  git branch 2> /dev/null | sed -e "/^[^*]/d" -e "s/* \(.*\)/ (\1)/"
+}
+
+export PS1="\u@\h \[\033[32m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "' >> ~/.bashrc
+
+echo 'DNS=172.29.0.25 172.29.0.23' >> /etc/systemd/resolved.conf
+
+echo 'FallbackDNS=8.8.8.8 8.8.4.4' >> /etc/systemd/resolved.conf
+
+source ~/.bashrc
+
 # Display completion message
 echo "Installation completed."
