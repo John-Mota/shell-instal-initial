@@ -124,19 +124,27 @@ wget -O fortnet.deb "https://links.fortinet.com/forticlient/deb/vpnagent"
 sudo dpkg -i fortnet.deb
 sudo apt-get install -f -y
 
-echo 'export NODE_OPTIONS="--max-old-space-size=8192"' >> ~/.bashrc
 
-echo 'parse_git_branch() {
+# Adicionar a função parse_git_branch e configuração do PS1
+sudo tee -a ~/.bashrc > /dev/null << 'EOF'
+
+parse_git_branch() {
   git branch 2> /dev/null | sed -e "/^[^*]/d" -e "s/* \(.*\)/ (\1)/"
 }
 
-export PS1="\u@\h \[\033[32m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "' >> ~/.bashrc
+export PS1="\u@\h \[\033[32m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "
 
-echo 'DNS=172.29.0.25 172.29.0.23' >> /etc/systemd/resolved.conf
-
-echo 'FallbackDNS=8.8.8.8 8.8.4.4' >> /etc/systemd/resolved.conf
-
+export NODE_OPTIONS="--max-old-space-size=8192"
+EOF
 source ~/.bashrc
+
+# Adicionar as configurações de DNS e FallbackDNS ao arquivo /etc/systemd/resolved.conf
+sudo tee -a /etc/systemd/resolved.conf > /dev/null << EOF
+DNS=172.29.0.25 172.29.0.23
+FallbackDNS=8.8.8.8 8.8.4.4
+EOF
+
+sudo systemctl restart systemd-resolved
 
 # Display completion message
 echo "Installation completed."
