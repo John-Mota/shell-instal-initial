@@ -11,11 +11,12 @@ sudo apt install curl -y
 # Ajustar Hora
 timedatectl set-local-rtc 1
 
+# Oh my Bahs
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
+
 # Instalar build-essential
 sudo apt-get install build-essential
 
-# Install git
-sudo apt install git -y
 
 # Install Docker
 
@@ -39,16 +40,6 @@ sudo apt-get -y install openjdk-11-jdk -y
 
 # PostgresQL
 sudo apt install postgresql -y
-
-# Instalar Edge
-wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-sudo install -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/
-sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge.list'
-rm microsoft.gpg
-
-sudo apt update
-
-sudo apt install microsoft-edge-stable
 
 
 # install NVM
@@ -78,9 +69,6 @@ sudo apt install -f -y
 # Remove .deb files after installation (optional)
 rm discord.deb gimp.deb telegram.deb hero_games.deb google-chrome-stable_current_amd64.deb mysql-apt-config_0.8.16-1_all.deb mysql-workbench-community_8.0.28-1ubuntu20.04_amd64.deb
 
-# Install Tweak-tool
-sudo apt install gnome-tweaks -y
-
 # Install flatpak
 sudo apt install flatpak -y
 sudo apt install gnome-software-plugin-flatpak -y
@@ -98,11 +86,6 @@ flatpak install flathub com.mattjakeman.ExtensionManager -y
 # Deezer
 flatpak install flathub dev.aunetx.deezer -y
 
-# OnlyOffice
-flatpak install flathub org.onlyoffice.desktopeditors -y
-
-# Postman
-sudo snap install postman -y
 
 # DBeaver Community
 flatpak install flathub io.dbeaver.DBeaverCommunity -y
@@ -134,7 +117,7 @@ parse_git_branch() {
 
 export PS1="\u@\h \[\033[32m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "
 
-export NODE_OPTIONS="--max-old-space-size=8192"
+export NODE_OPTIONS="--max-old-space-size=4096"
 EOF
 source ~/.bashrc
 
@@ -147,4 +130,23 @@ EOF
 sudo systemctl restart systemd-resolved
 
 # Display completion message
-echo "Installation completed."
+echo "Ajuste bash OSH_THEME="lambda"
+, alias ll='ls -la - color=auto'
+alias gs='git status'
+alias gp='git pull'
+alias gcd='git checkout develop'
+, plugins=(
+  git
+  bashmarks
+  ansible
+  bash-preexec
+  bu
+  colored-man-pages
+  gcloud
+  kubectl
+  npm
+  nvm
+  sudo
+  zoxide
+)
+"
