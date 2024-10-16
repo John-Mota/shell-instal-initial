@@ -3,6 +3,9 @@
 # Definir variável de e-mail
 EMAIL=""
 
+# Install NODE
+nvm install 20.18.0
+
 # Install Spring Tool
 wget https://cdn.spring.io/spring-tools/release/STS4/4.24.0.RELEASE/dist/e4.32/spring-tool-suite-4-4.24.0.RELEASE-e4.32.0-linux.gtk.x86_64.tar.gz
 sudo tar zxvf spring-tool-suite-4-4.24.0.RELEASE-e4.32.0-linux.gtk.x86_64.tar.gz

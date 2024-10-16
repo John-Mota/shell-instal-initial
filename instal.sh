@@ -16,6 +16,11 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/mast
 
 # Instalar build-essential
 sudo apt-get install build-essential
+ # Install EDGE
+
+ wget https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_129.0.2792.89-1_amd64.deb
+sudo dpkg -i microsoft-edge-stable_129.0.2792.89-1_amd64.deb
+sudo apt-get install -f
 
 
 # Install Docker
@@ -41,9 +46,11 @@ sudo apt-get -y install openjdk-11-jdk -y
 # PostgresQL
 sudo apt install postgresql -y
 
-
 # install NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+
+# install Yarn
+npm install --global yarn
 
 # Download Google Chrome .deb file
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
