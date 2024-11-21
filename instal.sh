@@ -11,8 +11,7 @@ sudo apt install curl -y
 # Ajustar Hora
 timedatectl set-local-rtc 1
 
-# Oh my Bahs
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
+
 
 # Instalar build-essential
 sudo apt-get install build-essential
@@ -131,29 +130,6 @@ source ~/.bashrc
 # Adicionar as configurações de DNS e FallbackDNS ao arquivo /etc/systemd/resolved.conf
 sudo tee -a /etc/systemd/resolved.conf > /dev/null << EOF
 DNS=172.29.0.25 172.29.0.23
-FallbackDNS=8.8.8.8 8.8.4.4
 EOF
 
 sudo systemctl restart systemd-resolved
-
-# Display completion message
-echo "Ajuste bash OSH_THEME="lambda"
-, alias ll='ls -la - color=auto'
-alias gs='git status'
-alias gp='git pull'
-alias gcd='git checkout develop'
-, plugins=(
-  git
-  bashmarks
-  ansible
-  bash-preexec
-  bu
-  colored-man-pages
-  gcloud
-  kubectl
-  npm
-  nvm
-  sudo
-  zoxide
-)
-"

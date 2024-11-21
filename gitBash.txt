@@ -1,0 +1,21 @@
+# Oh my Bahs
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh)"
+
+OSH_THEME="lambda"
+
+alias ll='ls -la - color=auto'
+alias gs='git status'
+alias gp='git pull'
+alias gcd='git checkout develop'
+
+
+ansible
+  bash-preexec
+  bu
+  colored-man-pages
+  gcloud
+  kubectl
+  npm
+  nvm
+  sudo
+  zoxide
