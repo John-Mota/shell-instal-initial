@@ -48,8 +48,8 @@ sudo apt install postgresql -y
 # install NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
-# install Yarn
-npm install --global yarn
+# Install gnome-tweak-tool
+sudo apt install gnome-tweak-tool
 
 # Download Google Chrome .deb file
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
