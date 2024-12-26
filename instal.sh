@@ -45,6 +45,23 @@ sudo apt-get -y install openjdk-11-jdk -y
 # PostgresQL
 sudo apt install postgresql -y
 
+# Inicia o serviço do PostgreSQL
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+
+# Cria um novo usuário no PostgreSQL
+sudo -u postgres psql -c "CREATE USER john WITH PASSWORD 'john3472';"
+
+# Concede privilégios de superusuário (opcional - remova se não precisar)
+sudo -u postgres psql -c "ALTER USER john WITH SUPERUSER;"
+
+# Cria um banco de dados com o mesmo nome do usuário (prática comum)
+sudo -u postgres psql -c "CREATE DATABASE john OWNER john;"
+
+# Configura a autenticação no arquivo pg_hba.conf para permitir login com senha
+sudo sed -i '/^local.*all.*all.*peer/c\local   all             all                                     md5' /etc/postgresql/*/main/pg_hba.conf
+sudo systemctl restart postgresql
+
 # install NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
