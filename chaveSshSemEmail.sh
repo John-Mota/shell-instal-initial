@@ -4,7 +4,11 @@
 EMAIL=""
 
 # Install NODE
-nvm install 20.18.0
+mise use --global node@20.18.0
+
+mise use --global java@21.0.0
+
+mise use --global java@11.0.0
 
 # install Yarn
 npm install --global yarn

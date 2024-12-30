@@ -97,13 +97,10 @@ sudo apt install -f -y
 rm discord.deb gimp.deb telegram.deb hero_games.deb google-chrome-stable_current_amd64.deb mysql-apt-config_0.8.16-1_all.deb mysql-workbench-community_8.0.28-1ubuntu20.04_amd64.deb
 
 
-# Mise 
-sudo apt update -y && sudo apt install -y gpg sudo wget curl
-sudo install -dm 755 /etc/apt/keyrings
-wget -qO - https://mise.jdx.dev/gpg-key.pub | gpg --dearmor | sudo tee /etc/apt/keyrings/mise-archive-keyring.gpg 1> /dev/null
-echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch=amd64] https://mise.jdx.dev/deb stable main" | sudo tee /etc/apt/sources.list.d/mise.list
-sudo apt update
-sudo apt install -y mise
+# Install Mise
+curl https://mise.run | sh
+echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
+
 
 # Install flatpak
 sudo apt install flatpak -y
@@ -125,6 +122,12 @@ flatpak install flathub dev.aunetx.deezer -y
 
 # DBeaver Community
 flatpak install flathub io.dbeaver.DBeaverCommunity -y
+
+# InteliJ
+flatpak install flathub com.jetbrains.IntelliJ-IDEA-Community -y
+
+# Postman
+sudo snap install postman
 
 # Instalar os pacotes na ordem correta
 sudo dpkg -i 1-gconf2-common_3.2.6-7ubuntu2_all.deb
