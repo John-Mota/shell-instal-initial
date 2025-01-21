@@ -119,7 +119,6 @@ flatpak install flathub com.mattjakeman.ExtensionManager -y
 # Deezer
 flatpak install flathub dev.aunetx.deezer -y
 
-
 # DBeaver Community
 flatpak install flathub io.dbeaver.DBeaverCommunity -y
 
@@ -148,17 +147,11 @@ sudo apt-get install -f -y
 
 
 # Adicionar a função parse_git_branch e configuração do PS1
-sudo tee -a ~/.bashrc > /dev/null << 'EOF'
-
-parse_git_branch() {
-  git branch 2> /dev/null | sed -e "/^[^*]/d" -e "s/* \(.*\)/ (\1)/"
-}
-
-export PS1="\u@\h \[\033[32m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "
+sudo tee -a ~/.zshrc > /dev/null << 'EOF'
 
 export NODE_OPTIONS="--max-old-space-size=4096"
 EOF
-source ~/.bashrc
+source ~/.zshrc
 
 # Adicionar as configurações de DNS e FallbackDNS ao arquivo /etc/systemd/resolved.conf
 sudo tee -a /etc/systemd/resolved.conf > /dev/null << EOF
