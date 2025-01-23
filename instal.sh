@@ -14,12 +14,7 @@ timedatectl set-local-rtc 1
 
 
 # Instalar build-essential
-sudo apt-get install build-essential
- # Install EDGE
-
- wget https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_129.0.2792.89-1_amd64.deb
-sudo dpkg -i microsoft-edge-stable_129.0.2792.89-1_amd64.deb
-sudo apt-get install -f
+sudo apt-get install build-essential -y
 
 
 # Install Docker
@@ -66,11 +61,9 @@ sudo -u postgres psql -c "CREATE DATABASE john OWNER john;"
 sudo sed -i '/^local.*all.*all.*peer/c\local   all             all                                     md5' /etc/postgresql/*/main/pg_hba.conf
 sudo systemctl restart postgresql
 
-# install NVM
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
 # Install gnome-tweak-tool
-sudo apt install gnome-tweak-tool
+sudo apt install gnome-tweak-tool -y
 
 # Download Google Chrome .deb file
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -128,6 +121,19 @@ flatpak install flathub com.jetbrains.IntelliJ-IDEA-Community -y
 # Postman
 sudo snap install postman
 
+# OnlyOffice
+flatpak install flathub org.onlyoffice.desktopeditors -y
+
+# Note Translate
+flatpak install flathub net.mkiol.SpeechNote -y
+
+# Notes
+flatpak install flathub com.vixalien.sticky -y
+
+#DevToll
+flatpak install flathub me.iepure.devtoolbox -y
+
+flatpak install flathub io.github.brunofin.Cohesion -y
 # Instalar os pacotes na ordem correta
 sudo dpkg -i 1-gconf2-common_3.2.6-7ubuntu2_all.deb
 sudo dpkg -i 2-libgconf-2-4_3.2.6-7ubuntu2_amd64.deb
