@@ -2,26 +2,20 @@
 
 # Update package list
 sudo apt update
-
 sudo apt upgrade -y
 
 # Install curl
 sudo apt install curl -y
 
-# Ajustar Hora
-timedatectl set-local-rtc 1
-
-
-
 # Instalar build-essential
 sudo apt-get install build-essential -y
-
 
 # Install Docker
 
 sudo apt-get install \ ca-certificates \ curl \ gnupg \ lsb-release
 
 sudo mkdir -p /etc/apt/keyrings
+
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 
 echo \
@@ -32,14 +26,14 @@ sudo apt-get update
 
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-
 if ! getent group docker > /dev/null; then
     sudo groupadd docker
 fi
 sudo usermod -aG docker $USER
 sudo systemctl restart docker
 
- 
+ # Flameshot
+ sudo apt install flameshot -y
 
 # PostgresQL
 sudo apt install postgresql -y
@@ -65,15 +59,6 @@ sudo systemctl restart postgresql
 # Install gnome-tweak-tool
 sudo apt install gnome-tweak-tool -y
 
-# Download Google Chrome .deb file
-wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-
-# Install Google Chrome from downloaded .deb file
-sudo dpkg -i google-chrome-stable_current_amd64.deb
-
-# If there are unmet dependencies, you can fix them with the following command
-sudo apt-get install -f -y
-
 # Download Discord
 wget -O discord.deb "https://discord.com/api/download?platform=linux&format=deb"
 
@@ -94,6 +79,11 @@ rm discord.deb gimp.deb telegram.deb hero_games.deb google-chrome-stable_current
 curl https://mise.run | sh
 echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
 
+# Fira Code
+sudo apt install flameshot -y
+
+# Braver
+curl -fsS https://dl.brave.com/install.sh | sh
 
 # Install flatpak
 sudo apt install flatpak -y
