@@ -106,6 +106,36 @@ sudo snap install postman
 print_status "Aplicando configurações do sistema"
 echo 'export NODE_OPTIONS="--max-old-space-size=8192"' >> ~/.zshrc
 
+print_status "Instalando dependências do sistema"
+declare -a DEPS=(
+    "1-gconf2-common_3.2.6-7ubuntu2_all.deb"
+    "2-libgconf-2-4_3.2.6-7ubuntu2_amd64.deb"
+    "3-libayatana-indicator7_0.9.1-1_amd64.deb"
+    "4-libdbusmenu-gtk4_16.04.1+18.10.20180917-0ubuntu8_amd64.deb"
+    "5-libldap-2.5-0_2.5.16+dfsg-0ubuntu0.22.04.2_amd64.deb"
+    "6-libappindicator1_12.10.1+20.10.20200706.1-0ubuntu1_amd64.deb"
+    "7-libayatana-appindicator1_0.5.90-7ubuntu2_amd64.deb"
+)
+
+for dep in "${DEPS[@]}"; do
+    print_status "Instalando $dep"
+    sudo dpkg -i "$dep"
+    check_error "Falha na instalação de $dep"
+done
+
+# Corrigir dependências
+sudo apt-get install -f -y
+check_error "Falha na correção de dependências"
+
+# FortiClient VPN
+print_status "Instalando FortiClient VPN"
+wget -O fortnet.deb "https://links.fortinet.com/forticlient/deb/vpnagent"
+check_error "Falha no download do FortiClient"
+sudo dpkg -i fortnet.deb
+sudo apt-get install -f -y
+rm fortnet.deb
+check_error "Falha na instalação do FortiClient"
+
 # DNS
 print_status "Configurando DNS"
 sudo tee -a /etc/systemd/resolved.conf > /dev/null << EOF
