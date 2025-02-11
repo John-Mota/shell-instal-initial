@@ -10,6 +10,9 @@ sudo apt install curl -y
 # Instalar build-essential
 sudo apt-get install build-essential -y
 
+# Install java 11
+sudo apt install openjdk-11-jre-headless -y
+
 # Install Docker
 
 sudo apt-get install \ ca-certificates \ curl \ gnupg \ lsb-release
