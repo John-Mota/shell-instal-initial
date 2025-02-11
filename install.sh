@@ -48,6 +48,24 @@ install_apt_package() {
     fi
 }
 
+# Função para instalar pacotes .deb
+install_deb_package() {
+    local package_name=$1
+    local deb_url=$2
+    local deb_file="$package_name.deb"
+    
+    print_status "Baixando e instalando $package_name..."
+    if wget -O "$deb_file" "$deb_url" && \
+       sudo dpkg -i "$deb_file" && \
+       sudo apt-get install -f -y; then
+        print_success "$package_name instalado com sucesso"
+        rm -f "$deb_file"
+    else
+        print_error "Falha ao instalar $package_name"
+        rm -f "$deb_file"
+    fi
+}
+
 # Função para instalar flatpak
 install_flatpak() {
     print_status "Instalando $1..."
@@ -108,8 +126,10 @@ main() {
         print_error "Falha na atualização do sistema"
     fi
 
+    # Instalar pacotes básicos
     install_apt_package "curl"
     install_apt_package "build-essential"
+    install_apt_package "openjdk-11-jre-headless"
 
     # Docker
     print_status "Instalando Docker"
@@ -122,25 +142,29 @@ main() {
         sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     }; then
         print_success "Docker instalado com sucesso"
+        
+        # Configuração do grupo Docker
+        if sudo groupadd docker 2>/dev/null || true && sudo usermod -aG docker "$USER" && sudo systemctl restart docker; then
+            print_success "Grupo Docker configurado com sucesso"
+        else
+            print_error "Falha na configuração do grupo Docker"
+        fi
     else
         print_error "Falha na instalação do Docker"
     fi
-    
-    # Configuração do grupo Docker
-    if sudo groupadd docker 2>/dev/null || true && sudo usermod -aG docker "$USER" && sudo systemctl restart docker; then
-        print_success "Grupo Docker configurado com sucesso"
-    else
-        print_error "Falha na configuração do grupo Docker"
-    fi
+
+    # Flameshot
+    install_apt_package "flameshot"
 
     # PostgreSQL
     print_status "Instalando PostgreSQL"
     if install_apt_package "postgresql" && {
         sudo systemctl start postgresql &&
         sudo systemctl enable postgresql &&
-        sudo -u postgres psql -c "CREATE USER john WITH PASSWORD 'john3472' SUPERUSER;" 2>/dev/null || true &&
-        sudo -u postgres psql -c "CREATE DATABASE john OWNER john;" 2>/dev/null || true &&
-        sudo sed -i 's/^local.*all.*all.*peer/local   all             all                                     md5/' /etc/postgresql/*/main/pg_hba.conf &&
+        sudo -u postgres psql -c "CREATE USER john WITH PASSWORD 'john3472';" &&
+        sudo -u postgres psql -c "ALTER USER john WITH SUPERUSER;" &&
+        sudo -u postgres psql -c "CREATE DATABASE john OWNER john;" &&
+        sudo sed -i '/^local.*all.*all.*peer/c\local   all             all                                     md5' /etc/postgresql/*/main/pg_hba.conf &&
         sudo systemctl restart postgresql
     }; then
         print_success "PostgreSQL configurado com sucesso"
@@ -148,12 +172,103 @@ main() {
         print_error "Falha na configuração do PostgreSQL"
     fi
 
-    # [... resto do script continua igual ...]
+    # GNOME Tweaks
+    install_apt_package "gnome-tweak-tool"
 
-    # DNS - Versão simplificada e mais robusta
-    print_status "Configurando DNS"
+    # Discord
+    install_deb_package "discord" "https://discord.com/api/download?platform=linux&format=deb"
+
+    # VSCode
+    install_deb_package "vscode" "https://go.microsoft.com/fwlink/?LinkID=760868"
+
+    # Mise
+    print_status "Instalando Mise"
+    if curl https://mise.run | sh; then
+        echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
+        print_success "Mise instalado com sucesso"
+    else
+        print_error "Falha na instalação do Mise"
+    fi
+
+    # Brave Browser
+    print_status "Instalando Brave Browser"
+    if curl -fsS https://dl.brave.com/install.sh | sh; then
+        print_success "Brave Browser instalado com sucesso"
+    else
+        print_error "Falha na instalação do Brave Browser"
+    fi
+
+    # Flatpak
+    print_status "Configurando Flatpak"
     if {
-        sudo echo "DNS=172.29.0.25 172.29.0.23" | sudo tee -a /etc/systemd/resolved.conf &&
+        install_apt_package "flatpak" &&
+        install_apt_package "gnome-software-plugin-flatpak" &&
+        flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    }; then
+        print_success "Flatpak configurado com sucesso"
+
+        # Instalação de aplicativos Flatpak
+        declare -a flatpak_apps=(
+            "io.github.mimbrero.WhatsAppDesktop"
+            "com.mattjakeman.ExtensionManager"
+            "dev.aunetx.deezer"
+            "io.dbeaver.DBeaverCommunity"
+            "com.jetbrains.IntelliJ-IDEA-Community"
+            "org.onlyoffice.desktopeditors"
+            "net.mkiol.SpeechNote"
+            "com.vixalien.sticky"
+            "me.iepure.devtoolbox"
+            "io.github.brunofin.Cohesion"
+        )
+
+        for app in "${flatpak_apps[@]}"; do
+            install_flatpak "$app"
+        done
+    else
+        print_error "Falha na configuração do Flatpak"
+    fi
+
+    # Postman
+    print_status "Instalando Postman"
+    if sudo snap install postman; then
+        print_success "Postman instalado com sucesso"
+    else
+        print_error "Falha na instalação do Postman"
+    fi
+
+    # Pacotes de dependência
+    print_status "Instalando pacotes de dependência"
+    declare -a dep_packages=(
+        "1-gconf2-common_3.2.6-7ubuntu2_all.deb"
+        "2-libgconf-2-4_3.2.6-7ubuntu2_amd64.deb"
+        "3-libayatana-indicator7_0.9.1-1_amd64.deb"
+        "4-libdbusmenu-gtk4_16.04.1+18.10.20180917-0ubuntu8_amd64.deb"
+        "5-libldap-2.5-0_2.5.16+dfsg-0ubuntu0.22.04.2_amd64.deb"
+        "6-libappindicator1_12.10.1+20.10.20200706.1-0ubuntu1_amd64.deb"
+        "7-libayatana-appindicator1_0.5.90-7ubuntu2_amd64.deb"
+    )
+
+    for package in "${dep_packages[@]}"; do
+        if sudo dpkg -i "$package"; then
+            print_success "Pacote $package instalado com sucesso"
+        else
+            print_error "Falha ao instalar pacote $package"
+        fi
+    done
+
+    # Forticlient VPN
+    install_deb_package "fortnet" "https://links.fortinet.com/forticlient/deb/vpnagent"
+
+    # Configurações do sistema
+    print_status "Aplicando configurações do sistema"
+    
+    # NODE_OPTIONS
+    echo 'export NODE_OPTIONS="--max-old-space-size=4096"' >> ~/.zshrc
+    source ~/.zshrc
+
+    # DNS
+    if {
+        echo "DNS=172.29.0.25 172.29.0.23" | sudo tee -a /etc/systemd/resolved.conf &&
         sudo systemctl restart systemd-resolved
     }; then
         print_success "DNS configurado com sucesso"
