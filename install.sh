@@ -129,7 +129,7 @@ main() {
     # Instalar pacotes básicos
     install_apt_package "curl"
     install_apt_package "build-essential"
-    install_apt_package "openjdk-11-jre-headless"
+    install_apt_package "openjdk-21-jre-headless"
 
     # Docker
     print_status "Instalando Docker"
@@ -161,9 +161,6 @@ main() {
     if install_apt_package "postgresql" && {
         sudo systemctl start postgresql &&
         sudo systemctl enable postgresql &&
-        sudo -u postgres psql -c "CREATE USER john WITH PASSWORD 'john3472';" &&
-        sudo -u postgres psql -c "ALTER USER john WITH SUPERUSER;" &&
-        sudo -u postgres psql -c "CREATE DATABASE john OWNER john;" &&
         sudo sed -i '/^local.*all.*all.*peer/c\local   all             all                                     md5' /etc/postgresql/*/main/pg_hba.conf &&
         sudo systemctl restart postgresql
     }; then
@@ -184,7 +181,7 @@ main() {
     # Mise
     print_status "Instalando Mise"
     if curl https://mise.run | sh; then
-        echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
+        echo 'eval "$(~/.local/bin/mise activate fish | source)"' >> ~/.config/fish/config.fish
         print_success "Mise instalado com sucesso"
     else
         print_error "Falha na instalação do Mise"
@@ -211,13 +208,8 @@ main() {
         declare -a flatpak_apps=(
             "io.github.mimbrero.WhatsAppDesktop"
             "com.mattjakeman.ExtensionManager"
-            "dev.aunetx.deezer"
             "io.dbeaver.DBeaverCommunity"
             "com.jetbrains.IntelliJ-IDEA-Community"
-            "org.onlyoffice.desktopeditors"
-            "net.mkiol.SpeechNote"
-            "com.vixalien.sticky"
-            "me.iepure.devtoolbox"
             "io.github.brunofin.Cohesion"
         )
 
@@ -236,18 +228,6 @@ main() {
         print_error "Falha na instalação do Postman"
     fi
 
-    # Pacotes de dependência
-    print_status "Instalando pacotes de dependência"
-    declare -a dep_packages=(
-        "1-gconf2-common_3.2.6-7ubuntu2_all.deb"
-        "2-libgconf-2-4_3.2.6-7ubuntu2_amd64.deb"
-        "3-libayatana-indicator7_0.9.1-1_amd64.deb"
-        "4-libdbusmenu-gtk4_16.04.1+18.10.20180917-0ubuntu8_amd64.deb"
-        "5-libldap-2.5-0_2.5.16+dfsg-0ubuntu0.22.04.2_amd64.deb"
-        "6-libappindicator1_12.10.1+20.10.20200706.1-0ubuntu1_amd64.deb"
-        "7-libayatana-appindicator1_0.5.90-7ubuntu2_amd64.deb"
-    )
-
     for package in "${dep_packages[@]}"; do
         if sudo dpkg -i "$package"; then
             print_success "Pacote $package instalado com sucesso"
@@ -256,25 +236,12 @@ main() {
         fi
     done
 
-    # Forticlient VPN
-    install_deb_package "fortnet" "https://links.fortinet.com/forticlient/deb/vpnagent"
-
     # Configurações do sistema
     print_status "Aplicando configurações do sistema"
     
     # NODE_OPTIONS
-    echo 'export NODE_OPTIONS="--max-old-space-size=4096"' >> ~/.zshrc
-    source ~/.zshrc
-
-    # DNS
-    if {
-        echo "DNS=172.29.0.25 172.29.0.23" | sudo tee -a /etc/systemd/resolved.conf &&
-        sudo systemctl restart systemd-resolved
-    }; then
-        print_success "DNS configurado com sucesso"
-    else
-        print_error "Falha na configuração do DNS"
-    fi
+    echo 'export NODE_OPTIONS="--max-old-space-size=4096"' >> ~/.config/fish/config.fish
+    source ~/.config/fish/config.fish
 
     # Imprimir resumo final
     print_summary
