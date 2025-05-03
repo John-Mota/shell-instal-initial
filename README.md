@@ -48,19 +48,19 @@ O script instala e configura:
 1. Baixe o script:
 
 ```bash
-wget https://raw.githubusercontent.com/seu-usuario/seu-repo/main/setup.sh
+git clone https://github.com/John-Mota/shell-instal-initial.git
 ```
 
 2. Dê permissão de execução:
 
 ```bash
-chmod +x setup.sh
+chmod +x install.sh
 ```
 
 3. Execute o script:
 
 ```bash
-./setup.sh
+./install.sh
 ```
 
 ## ⚙️ Configurações Realizadas
