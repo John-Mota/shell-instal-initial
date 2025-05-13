@@ -129,7 +129,7 @@ main() {
     # Instalar pacotes básicos
     install_apt_package "curl"
     install_apt_package "build-essential"
-    install_apt_package "openjdk-21-jre-headless"
+    install_apt_package "openjdk-21-jdk"
 
     # Docker
     print_status "Instalando Docker"
