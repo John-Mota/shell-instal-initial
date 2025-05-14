@@ -131,6 +131,35 @@ main() {
     install_apt_package "build-essential"
     install_apt_package "openjdk-21-jdk"
 
+     # Flatpak
+    print_status "Configurando Flatpak"
+    if {
+        install_apt_package "flatpak" &&
+        install_apt_package "gnome-software-plugin-flatpak" &&
+        flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+    }; then
+        print_success "Flatpak configurado com sucesso"
+
+        # Instalação de aplicativos Flatpak
+        declare -a flatpak_apps=(
+            "com.ktechpit.whatsie"
+            "com.mattjakeman.ExtensionManager"
+            "io.dbeaver.DBeaverCommunity"
+            "com.jetbrains.IntelliJ-IDEA-Community"
+            "io.github.brunofin.Cohesion"
+            "io.github.lainsce.Notejot"
+            "com.discordapp.Discord"
+            "md.obsidian.Obsidian"
+            "org.onlyoffice.desktopeditors"
+        )
+
+        for app in "${flatpak_apps[@]}"; do
+            install_flatpak "$app"
+        done
+    else
+        print_error "Falha na configuração do Flatpak"
+    fi
+
     # Docker
     print_status "Instalando Docker"
     if {
@@ -172,9 +201,6 @@ main() {
     # GNOME Tweaks
     install_apt_package "gnome-tweak-tool"
 
-    # Discord
-    install_deb_package "discord" "https://discord.com/api/download?platform=linux&format=deb"
-
     # VSCode
     install_deb_package "vscode" "https://go.microsoft.com/fwlink/?LinkID=760868"
 
@@ -195,30 +221,7 @@ main() {
         print_error "Falha na instalação do Brave Browser"
     fi
 
-    # Flatpak
-    print_status "Configurando Flatpak"
-    if {
-        install_apt_package "flatpak" &&
-        install_apt_package "gnome-software-plugin-flatpak" &&
-        flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-    }; then
-        print_success "Flatpak configurado com sucesso"
-
-        # Instalação de aplicativos Flatpak
-        declare -a flatpak_apps=(
-            "io.github.mimbrero.WhatsAppDesktop"
-            "com.mattjakeman.ExtensionManager"
-            "io.dbeaver.DBeaverCommunity"
-            "com.jetbrains.IntelliJ-IDEA-Community"
-            "io.github.brunofin.Cohesion"
-        )
-
-        for app in "${flatpak_apps[@]}"; do
-            install_flatpak "$app"
-        done
-    else
-        print_error "Falha na configuração do Flatpak"
-    fi
+   
 
     # Postman
     print_status "Instalando Postman"
