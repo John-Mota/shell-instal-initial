@@ -1,0 +1,104 @@
+# ~/.config/starship.toml
+
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Adiciona uma linha em branco entre os prompts
+add_newline = true
+
+# Personaliza o símbolo do prompt
+[character]
+#success_symbol = "[➜](bold green)"
+error_symbol = "[✗](bold red)"
+
+# Remove o módulo de pacotes (ex: npm, cargo, etc.)
+[package]
+disabled = true
+
+# Mostra o nome do usuário apenas se estiver como root ou em SSH
+[username]
+show_always = false
+style_user = "yellow bold"
+style_root = "red bold"
+
+# Mostra o hostname apenas em SSH
+[hostname]
+ssh_only = true
+style = "bold dimmed white"
+
+# Mostra a branch atual do Git
+[git_branch]
+symbol = "🌱 "
+style = "purple bold"
+
+# Mostra o status do repositório Git
+[git_status]
+style = "red bold"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+modified = "[!](yellow)"
+untracked = "[?](cyan)"
+staged = "[+](green)"
+deleted = "[-](red)"
+
+# Mostra o diretório atual
+[directory]
+style = "blue bold"
+truncation_length = 3
+truncate_to_repo = false
+
+# Mostra o tempo de execução de comandos
+[cmd_duration]
+min_time = 1000
+format = "took [$duration](bold yellow)"
+
+# Kubernetes context (kubectl)
+[kubernetes]
+symbol = "☸️ "
+format = '[$symbol$context( \($namespace\))]($style) '
+style = "cyan bold"
+disabled = false
+
+# Terraform
+[terraform]
+format = '[💠 terraform $version]($style) '
+style = "105"
+disabled = false
+
+# Docker context
+[docker_context]
+format = '[🐳 $context]($style) '
+style = "blue bold"
+only_with_files = false
+disabled = false
+
+# AWS profile
+[aws]
+format = '[$symbol($profile)(\($region\))]($style) '
+style = "bold yellow"
+symbol = "☁️  "
+disabled = false
+
+# Azure
+[azure]
+format = '[ ($subscription)]($style) '
+style = "blue bold"
+disabled = false
+
+# Helm
+[helm]
+format = '[⎈ $version]($style) '
+style = "cyan bold"
+disabled = false
+
+# Node.js (caso use pra scripts de DevOps)
+[nodejs]
+format = '[⬢ $version]($style) '
+style = "green bold"
+disabled = false
+
+# Python (caso use boto3, ansible, etc)
+[python]
+symbol = "🐍 "
+style = "yellow bold"
+format = '[${symbol}${version}]($style) '
+disabled = false
