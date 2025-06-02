@@ -145,7 +145,6 @@ main() {
             "com.ktechpit.whatsie"
             "com.mattjakeman.ExtensionManager"
             "io.dbeaver.DBeaverCommunity"
-            "com.jetbrains.IntelliJ-IDEA-Community"
             "io.github.brunofin.Cohesion"
             "io.github.lainsce.Notejot"
             "com.discordapp.Discord"
@@ -184,6 +183,9 @@ main() {
 
     # Flameshot
     install_apt_package "flameshot"
+    
+    # Fira code
+    install_apt_package "fonts-firacode"
 
     # PostgreSQL
     print_status "Instalando PostgreSQL"
@@ -219,6 +221,14 @@ main() {
         print_success "Brave Browser instalado com sucesso"
     else
         print_error "Falha na instalação do Brave Browser"
+    fi
+    
+    # Intelij
+    print_status "Instalando Intellij-community"
+    if sudo snap install intellij-idea-community --classic; then
+        print_success "Intellij-community instalado com sucesso"
+    else
+        print_error "Falha na instalação do Intellij-community"
     fi
 
    
