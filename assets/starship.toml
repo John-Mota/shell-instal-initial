@@ -5,14 +5,13 @@
 # Adiciona uma linha em branco entre os prompts
 add_newline = true
 
-# Personaliza o símbolo do prompt
-[character]
-#success_symbol = "[➜](bold green)"
-error_symbol = "[✗](bold red)"
-
-# Remove o módulo de pacotes (ex: npm, cargo, etc.)
 [package]
 disabled = true
+
+# Personaliza o símbolo do prompt
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[✗](bold red)"
 
 # Mostra o nome do usuário apenas se estiver como root ou em SSH
 [username]
@@ -29,20 +28,26 @@ style = "bold dimmed white"
 [git_branch]
 symbol = "🌱 "
 style = "purple bold"
+truncation_length = 10
+truncation_symbol = ''
+ignore_branches = ['master', 'main']
 
 # Mostra o status do repositório Git
 [git_status]
-style = "red bold"
-ahead = "⇡${count}"
-behind = "⇣${count}"
-modified = "[!](yellow)"
-untracked = "[?](cyan)"
-staged = "[+](green)"
-deleted = "[-](red)"
+conflicted = '🏳'
+ahead = '🏎💨'
+behind = '😰'
+diverged = '😵'
+up_to_date = '✓'
+untracked = '🤷'
+modified = '📝'
+staged = '[++\($count\)](green)'
+renamed = '👅'
+deleted = '🗑'
 
 # Mostra o diretório atual
 [directory]
-style = "blue bold"
+style = "#F82AA8 bold"
 truncation_length = 3
 truncate_to_repo = false
 
@@ -71,13 +76,6 @@ style = "blue bold"
 only_with_files = false
 disabled = false
 
-# AWS profile
-[aws]
-format = '[$symbol($profile)(\($region\))]($style) '
-style = "bold yellow"
-symbol = "☁️  "
-disabled = false
-
 # Azure
 [azure]
 format = '[ ($subscription)]($style) '
@@ -102,3 +100,47 @@ symbol = "🐍 "
 style = "yellow bold"
 format = '[${symbol}${version}]($style) '
 disabled = false
+
+
+[aws]
+format = 'on [$symbol($profile )(\($region\) )]($style)'
+style = 'bold blue'
+symbol = '🅰 '
+[aws.region_aliases]
+ap-southeast-2 = 'au'
+us-east-1 = 'va'
+[aws.profile_aliases]
+CompanyGroupFrobozzOnCallAccess = 'Frobozz'
+
+#[container]
+#format = '[$symbol \[$name\]]($style) '
+
+# ~/.config/starship.toml
+
+[dart]
+format = ' [🔰 $version](bold red) '
+
+[gcloud]
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+
+[git_commit]
+commit_hash_length = 8
+tag_symbol = '🔖 '
+
+[git_state]
+format = '[\($state( $progress_current of $progress_total)\)]($style) '
+cherry_pick = '[🍒 PICKING](bold red)'
+
+[git_metrics]
+added_style = 'bold blue'
+format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
+
+
+[sudo]
+style = 'bold green'
+symbol = '👩‍💻 '
+disabled = false
+
+[java]
+format = '[${symbol}(${version} )]($style)'
+style = 'bright-red'
