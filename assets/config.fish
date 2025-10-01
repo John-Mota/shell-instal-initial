@@ -1,10 +1,13 @@
-
+if status is-interactive
+    # Commands to run in interactive sessions can go here
+end
+set -U fish_greeting ""
 fzf --fish | source
 zoxide init fish | source
 set SPACEFISH_PROMPT_ADD_NEWLINE false
+eval "$(~/.local/bin/mise activate fish | source)"
+export NODE_OPTIONS="--max-old-space-size=4096"
 starship init fish | source
-
-
 
 
 # Alias do Sistema
