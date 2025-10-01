@@ -130,6 +130,9 @@ main() {
     install_apt_package "curl"
     install_apt_package "build-essential"
     install_apt_package "openjdk-21-jdk"
+    install_apt_package "eza"
+    install_apt_package "bat"
+    install_apt_package "zoxide"
 
      # Flatpak
     print_status "Configurando Flatpak"
@@ -249,8 +252,24 @@ main() {
         fi
     done
 
+    # Intsall FZF
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    # Roda o instalador interativo do fzf
+    ~/.fzf/install --all
+
+
+    # Configurar StarShip
+    print_status "Configurando Starship"
+    curl -sS https://starship.rs/install.sh | sh
+    mkdir -p ~/.config && touch ~/.config/starship.toml
+
+    cp "assets/config.fish" ~/.config/fish/config.fish
+    cp "assets/starship.toml" ~/.config/starship.toml
+
+
     # Configurações do sistema
     print_status "Aplicando configurações do sistema"
+    ~/.fzf/install --all
     
     # NODE_OPTIONS
     echo 'export NODE_OPTIONS="--max-old-space-size=4096"' >> ~/.config/fish/config.fish

@@ -1,11 +1,7 @@
-if status is-interactive
-    # Commands to run in interactive sessions can go here
-end
+
 fzf --fish | source
 zoxide init fish | source
 set SPACEFISH_PROMPT_ADD_NEWLINE false
-eval "$(~/.local/bin/mise activate fish | source)"
-export NODE_OPTIONS="--max-old-space-size=4096"
 starship init fish | source
 
 
@@ -25,6 +21,7 @@ alias pull='git pull'
 alias push='git push'
 alias gcb='git checkout -b'
 alias checkout='git checkout'
+alias clone='git clone'
 
 
 
