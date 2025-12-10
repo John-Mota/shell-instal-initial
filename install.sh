@@ -220,6 +220,248 @@ main() {
         print_error "Falha na configuração do PostgreSQL"
     fi
 
+    # ============================================
+    # DATABASE CLIENTS
+    # ============================================
+    print_status "Instalando clientes de banco de dados"
+    
+    install_apt_package "redis-tools"
+    install_apt_package "mysql-client"
+    
+    # MongoDB client
+    print_status "Instalando MongoDB client"
+    if {
+        curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | sudo gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg &&
+        echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list &&
+        sudo apt-get update &&
+        sudo apt-get install -y mongodb-mongosh
+    }; then
+        print_success "MongoDB client instalado com sucesso"
+    else
+        print_error "Falha ao instalar MongoDB client"
+    fi
+
+    # ============================================
+    # PRODUCTIVITY TOOLS
+    # ============================================
+    print_status "Instalando ferramentas de produtividade"
+    
+    install_apt_package "tmux"
+    install_apt_package "neovim"
+    install_apt_package "ripgrep"
+    install_apt_package "fd-find"
+    install_apt_package "jq"
+    install_apt_package "tree"
+    install_apt_package "htop"
+    install_apt_package "ncdu"
+    
+    # HTTPie - cliente HTTP melhorado
+    install_apt_package "httpie"
+
+    # ============================================
+    # NETWORK TOOLS
+    # ============================================
+    print_status "Instalando ferramentas de rede"
+    
+    install_apt_package "net-tools"
+    install_apt_package "nmap"
+    install_apt_package "traceroute"
+    install_apt_package "dnsutils"
+    install_apt_package "tcpdump"
+
+    # ============================================
+    # SECURITY TOOLS
+    # ============================================
+    print_status "Instalando ferramentas de segurança"
+    
+    install_apt_package "gnupg"
+    install_apt_package "pass"
+    install_apt_package "openssh-server"
+
+    # ============================================
+    # KUBERNETES TOOLS
+    # ============================================
+    print_status "Instalando ferramentas Kubernetes"
+    
+    # kubectl
+    print_status "Instalando kubectl"
+    if {
+        curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg &&
+        echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list &&
+        sudo apt-get update &&
+        sudo apt-get install -y kubectl
+    }; then
+        print_success "kubectl instalado com sucesso"
+    else
+        print_error "Falha ao instalar kubectl"
+    fi
+    
+    # Helm
+    print_status "Instalando Helm"
+    if curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash; then
+        print_success "Helm instalado com sucesso"
+    else
+        print_error "Falha ao instalar Helm"
+    fi
+    
+    # k9s
+    print_status "Instalando k9s"
+    if {
+        K9S_VERSION=$(curl -s https://api.github.com/repos/derailed/k9s/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/') &&
+        wget -O k9s.tar.gz "https://github.com/derailed/k9s/releases/latest/download/k9s_Linux_amd64.tar.gz" &&
+        tar -xzf k9s.tar.gz &&
+        sudo mv k9s /usr/local/bin/ &&
+        rm k9s.tar.gz
+    }; then
+        print_success "k9s instalado com sucesso"
+    else
+        print_error "Falha ao instalar k9s"
+    fi
+    
+    # Minikube
+    print_status "Instalando Minikube"
+    if {
+        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 &&
+        sudo install minikube-linux-amd64 /usr/local/bin/minikube &&
+        rm minikube-linux-amd64
+    }; then
+        print_success "Minikube instalado com sucesso"
+    else
+        print_error "Falha ao instalar Minikube"
+    fi
+
+    # ============================================
+    # CLOUD CLIs
+    # ============================================
+    print_status "Instalando Cloud CLIs"
+    
+    # AWS CLI
+    print_status "Instalando AWS CLI"
+    if {
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" &&
+        unzip -q awscliv2.zip &&
+        sudo ./aws/install &&
+        rm -rf aws awscliv2.zip
+    }; then
+        print_success "AWS CLI instalado com sucesso"
+    else
+        print_error "Falha ao instalar AWS CLI"
+    fi
+    
+    # Google Cloud CLI
+    print_status "Instalando Google Cloud CLI"
+    if {
+        curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg &&
+        echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list &&
+        sudo apt-get update &&
+        sudo apt-get install -y google-cloud-cli
+    }; then
+        print_success "Google Cloud CLI instalado com sucesso"
+    else
+        print_error "Falha ao instalar Google Cloud CLI"
+    fi
+    
+    # Azure CLI
+    print_status "Instalando Azure CLI"
+    if {
+        curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+    }; then
+        print_success "Azure CLI instalado com sucesso"
+    else
+        print_error "Falha ao instalar Azure CLI"
+    fi
+
+    # ============================================
+    # INFRASTRUCTURE AS CODE
+    # ============================================
+    print_status "Instalando ferramentas IaC"
+    
+    # Terraform
+    print_status "Instalando Terraform"
+    if {
+        wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg &&
+        echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list &&
+        sudo apt-get update &&
+        sudo apt-get install -y terraform
+    }; then
+        print_success "Terraform instalado com sucesso"
+    else
+        print_error "Falha ao instalar Terraform"
+    fi
+    
+    # Ansible
+    install_apt_package "ansible"
+
+    # ============================================
+    # CI/CD TOOLS
+    # ============================================
+    print_status "Instalando ferramentas CI/CD"
+    
+    # GitHub CLI
+    print_status "Instalando GitHub CLI"
+    if {
+        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg &&
+        sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg &&
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null &&
+        sudo apt-get update &&
+        sudo apt-get install -y gh
+    }; then
+        print_success "GitHub CLI instalado com sucesso"
+    else
+        print_error "Falha ao instalar GitHub CLI"
+    fi
+
+    # ============================================
+    # CONTAINER & DOCKER TOOLS
+    # ============================================
+    print_status "Instalando ferramentas para containers"
+    
+    # Lazydocker
+    print_status "Instalando Lazydocker"
+    if {
+        LAZYDOCKER_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazydocker/releases/latest" | grep -Po '"tag_name": "v\K[^"]*') &&
+        curl -Lo lazydocker.tar.gz "https://github.com/jesseduffield/lazydocker/releases/latest/download/lazydocker_${LAZYDOCKER_VERSION}_Linux_x86_64.tar.gz" &&
+        tar -xzf lazydocker.tar.gz lazydocker &&
+        sudo install lazydocker /usr/local/bin &&
+        rm lazydocker lazydocker.tar.gz
+    }; then
+        print_success "Lazydocker instalado com sucesso"
+    else
+        print_error "Falha ao instalar Lazydocker"
+    fi
+    
+    # ctop
+    print_status "Instalando ctop"
+    if {
+        sudo wget https://github.com/bcicen/ctop/releases/download/v0.7.7/ctop-0.7.7-linux-amd64 -O /usr/local/bin/ctop &&
+        sudo chmod +x /usr/local/bin/ctop
+    }; then
+        print_success "ctop instalado com sucesso"
+    else
+        print_error "Falha ao instalar ctop"
+    fi
+
+    # ============================================
+    # ADDITIONAL DEV TOOLS
+    # ============================================
+    print_status "Instalando ferramentas adicionais de desenvolvimento"
+    
+    # Postman (via Snap)
+    print_status "Instalando Postman"
+    if sudo snap install postman; then
+        print_success "Postman instalado com sucesso"
+    else
+        print_error "Falha ao instalar Postman"
+    fi
+    
+    # Insomnia (API client alternativo)
+    print_status "Instalando Insomnia"
+    if sudo snap install insomnia; then
+        print_success "Insomnia instalado com sucesso"
+    else
+        print_error "Falha ao instalar Insomnia"
+    fi
+
     # GNOME Tweaks
     install_apt_package "gnome-tweak-tool"
 
@@ -254,40 +496,39 @@ main() {
         print_error "Falha na instalação do Intellij-community"
     fi
 
-
-    for package in "${dep_packages[@]}"; do
-        if sudo dpkg -i "$package"; then
-            print_success "Pacote $package instalado com sucesso"
-        else
-            print_error "Falha ao instalar pacote $package"
-        fi
-    done
-
-    # Intsall FZF
-    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-    # Roda o instalador interativo do fzf
-    ~/.fzf/install --all
-
+    # Install FZF
+    print_status "Instalando FZF"
+    if git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install --all; then
+        print_success "FZF instalado com sucesso"
+    else
+        print_error "Falha ao instalar FZF"
+    fi
 
     # Configurar StarShip
     print_status "Configurando Starship"
-    curl -sS https://starship.rs/install.sh | sh
-    mkdir -p ~/.config && touch ~/.config/starship.toml
-
-    cp "assets/config.fish" ~/.config/fish/config.fish
-    cp "assets/starship.toml" ~/.config/starship.toml
-
-
-    # Configurações do sistema
-    print_status "Aplicando configurações do sistema"
-    ~/.fzf/install --all
-    
-    # NODE_OPTIONS
-    echo 'export NODE_OPTIONS="--max-old-space-size=4096"' >> ~/.config/fish/config.fish
-    source ~/.config/fish/config.fish
+    if curl -sS https://starship.rs/install.sh | sh; then
+        mkdir -p ~/.config && touch ~/.config/starship.toml
+        cp "assets/config.fish" ~/.config/fish/config.fish
+        cp "assets/starship.toml" ~/.config/starship.toml
+        print_success "Starship configurado com sucesso"
+    else
+        print_error "Falha ao configurar Starship"
+    fi
 
     # Imprimir resumo final
     print_summary
+    
+    # Mensagens finais
+    echo -e "\n${BLUE}========================================${NC}"
+    echo -e "${BLUE}PRÓXIMOS PASSOS:${NC}"
+    echo -e "${BLUE}========================================${NC}"
+    echo -e "\n${GREEN}1.${NC} Instale o Fish Shell manualmente:"
+    echo -e "   ${BLUE}sudo apt-get install fish${NC}"
+    echo -e "   ${BLUE}chsh -s /usr/bin/fish${NC}"
+    echo -e "\n${GREEN}2.${NC} Reinicie o sistema para aplicar todas as configurações"
+    echo -e "\n${GREEN}3.${NC} Após reiniciar, execute o script de configuração do Mise:"
+    echo -e "   ${BLUE}./mise_install.sh${NC}"
+    echo -e "\n${BLUE}========================================${NC}\n"
 }
 
 # Executa o script
