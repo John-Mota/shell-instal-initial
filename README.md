@@ -1,109 +1,293 @@
-# 🚀 Script de Instalação do Ambiente de Desenvolvimento
+# 🚀 Shell Install Initial - Ambiente de Desenvolvimento Completo
 
-Este script automatiza a configuração de um ambiente de desenvolvimento completo para Ubuntu, instalando e configurando todas as ferramentas necessárias.
+Script automatizado para configuração de ambiente de desenvolvimento **Fullstack e DevOps** no Ubuntu/Debian.
 
-## ✨ Funcionalidades
+## 📋 Índice
 
-O script instala e configura:
+- [Ferramentas Instaladas](#-ferramentas-instaladas)
+- [Pré-requisitos](#-pré-requisitos)
+- [Instalação](#-instalação)
+- [Pós-Instalação](#-pós-instalação)
+- [Estrutura do Projeto](#-estrutura-do-projeto)
 
-### 🛠️ Ferramentas de Desenvolvimento
+---
 
-- Docker e Docker Compose
-- PostgreSQL (com usuário padrão configurado)
-- Visual Studio Code
-- Mise (gerenciador de versões)
-- Postman
-- DBeaver
-- IntelliJ IDEA Community
+## 🛠️ Ferramentas Instaladas
 
-### 🌐 Navegadores
+### **Desenvolvimento Base**
 
-- Braver Browser
+- ✅ **Build Essential** - Compiladores e ferramentas de build
+- ✅ **OpenJDK 21** - Java Development Kit
+- ✅ **Git** - Controle de versão
+- ✅ **Curl & Wget** - Download de arquivos
 
-### 💻 Utilitários
+### **Editores & IDEs**
 
-- Flameshot (capturas de tela)
-- Gnome Tweaks
-- Fonte Fira Code
-- Extension Manager
+- ✅ **Visual Studio Code** - Editor de código
+- ✅ **IntelliJ IDEA Community** - IDE Java
+- ✅ **Neovim** - Editor de texto moderno
 
-### 📱 Aplicativos
+### **Containers & Orquestração**
 
-- WhatsApp Desktop
-- Deezer
-- OnlyOffice
-- SpeechNote
-- Sticky Notes
-- DevToolbox
-- Cohesion
+- ✅ **Docker** - Containerização
+- ✅ **Docker Compose** - Orquestração de containers
+- ✅ **Lazydocker** - Terminal UI para Docker
+- ✅ **ctop** - Monitor de containers
+- ✅ **Kubernetes (kubectl)** - CLI do Kubernetes
+- ✅ **Helm** - Package manager para Kubernetes
+- ✅ **k9s** - Terminal UI para Kubernetes
+- ✅ **Minikube** - Kubernetes local
 
-## 📋 Pré-requisitos
+### **Bancos de Dados**
 
-- Ubuntu 22.04 LTS ou superior
-- Conexão com a internet
-- Privilégios de administrador (sudo)
+- ✅ **PostgreSQL** - Banco relacional
+- ✅ **Redis Tools** - Cliente Redis
+- ✅ **MySQL Client** - Cliente MySQL
+- ✅ **MongoDB Shell** - Cliente MongoDB
+- ✅ **DBeaver** - GUI universal para bancos de dados
 
-## 🚀 Como Usar
+### **Cloud CLIs**
 
-1. Baixe o script:
+- ✅ **AWS CLI** - Amazon Web Services
+- ✅ **Google Cloud CLI** - Google Cloud Platform
+- ✅ **Azure CLI** - Microsoft Azure
+
+### **Infrastructure as Code**
+
+- ✅ **Terraform** - Provisionamento de infraestrutura
+- ✅ **Ansible** - Automação e configuração
+
+### **CI/CD & Version Control**
+
+- ✅ **GitHub CLI (gh)** - Interface CLI do GitHub
+- ✅ **FZF** - Fuzzy finder para terminal
+
+### **API Testing & Development**
+
+- ✅ **Postman** - Cliente API
+- ✅ **Insomnia** - Cliente API alternativo
+- ✅ **HTTPie** - Cliente HTTP melhorado
+
+### **Ferramentas de Produtividade**
+
+- ✅ **Tmux** - Multiplexador de terminal
+- ✅ **Ripgrep** - Busca rápida em arquivos
+- ✅ **fd-find** - Find melhorado
+- ✅ **jq** - Processador JSON
+- ✅ **bat** - Cat melhorado
+- ✅ **eza** - ls moderno
+- ✅ **zoxide** - cd inteligente
+- ✅ **htop** - Monitor de processos
+- ✅ **ncdu** - Analisador de disco
+- ✅ **tree** - Visualizador de árvore de diretórios
+
+### **Network Tools**
+
+- ✅ **net-tools** - Ferramentas de rede
+- ✅ **nmap** - Scanner de rede
+- ✅ **traceroute** - Rastreamento de rota
+- ✅ **dnsutils** - Utilitários DNS
+- ✅ **tcpdump** - Captura de pacotes
+
+### **Security**
+
+- ✅ **GnuPG** - Criptografia
+- ✅ **pass** - Gerenciador de senhas
+- ✅ **OpenSSH Server** - Servidor SSH
+
+### **Terminal & Shell**
+
+- ✅ **Starship** - Prompt moderno
+- ✅ **Mise** - Gerenciador de versões de linguagens
+- ✅ **Fish Shell** - Shell moderno (instalação manual)
+
+### **Aplicativos Desktop**
+
+- ✅ **Brave Browser** - Navegador web
+- ✅ **Discord** - Comunicação
+- ✅ **Flameshot** - Captura de tela
+- ✅ **GNOME Tweaks** - Personalização do GNOME
+- ✅ **Extension Manager** - Gerenciador de extensões GNOME
+
+### **Fontes**
+
+- ✅ **Fira Code** - Fonte com ligaduras para código
+
+---
+
+## 📦 Pré-requisitos
+
+- Ubuntu 20.04+ ou Debian 11+
+- Conexão com internet
+- Permissões de sudo
+- **NÃO execute como root**
+
+---
+
+## 🚀 Instalação
+
+### 1. Clone o repositório
 
 ```bash
 git clone https://github.com/John-Mota/shell-instal-initial.git
+cd shell-instal-initial
 ```
 
-2. Dê permissão de execução:
+### 2. Torne o script executável
 
 ```bash
 chmod +x install.sh
+chmod +x mise_install.sh
 ```
 
-3. Execute o script:
+### 3. Execute o script principal
 
 ```bash
 ./install.sh
 ```
 
-## ⚙️ Configurações Realizadas
+⏱️ **Tempo estimado**: 30-60 minutos (dependendo da velocidade da internet)
 
-O script realiza as seguintes configurações:
+---
 
-- Configura o Docker para executar sem sudo
-- Cria usuário no PostgreSQL com nome 'john'
-- Configura DNS personalizado
-- Aumenta o limite de memória do Node.js
-- Instala e configura o Flatpak
+## 🔧 Pós-Instalação
 
-## ⚠️ Observações Importantes
-
-1. Faça backup dos seus dados antes de executar
-2. O script solicitará sua senha sudo algumas vezes
-3. A instalação pode demorar dependendo da sua internet
-4. Reinicie o computador após a conclusão
-
-## 🔄 Manutenção
-
-Para manter seu ambiente atualizado:
+### 1. Instale o Fish Shell
 
 ```bash
-# Atualizar sistema
-sudo apt update && sudo apt upgrade -y
-
-# Atualizar Flatpak
-flatpak update
+sudo apt-get install fish
+chsh -s /usr/bin/fish
 ```
 
-## 🐛 Resolução de Problemas
+### 2. Reinicie o sistema
 
-Se encontrar problemas:
+```bash
+sudo reboot
+```
 
-1. Verifique se tem permissões de sudo
-2. Confira sua conexão com a internet
-3. Verifique se os serviços estão rodando:
-   ```bash
-   sudo systemctl status docker
-   sudo systemctl status postgresql
-   ```
+### 3. Configure o Mise (após reiniciar)
+
+```bash
+./mise_install.sh
+```
+
+Este script instalará via Mise:
+
+- **Node.js LTS**
+- **Python 3.12**
+- **Go (latest)**
+- **Rust (latest)**
+- **Bun (latest)**
+- **Deno (latest)**
+
+### 4. Verifique as instalações
+
+```bash
+# Docker
+docker --version
+docker compose version
+
+# Kubernetes
+kubectl version --client
+helm version
+k9s version
+
+# Cloud CLIs
+aws --version
+gcloud --version
+az --version
+
+# IaC
+terraform --version
+ansible --version
+
+# Linguagens (após mise_install.sh)
+node --version
+python --version
+go version
+rustc --version
+```
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+shell-instal-initial/
+├── install.sh              # Script principal de instalação
+├── mise_install.sh         # Script de configuração do Mise
+├── README.md              # Este arquivo
+├── install_log.txt        # Log gerado após instalação
+└── assets/
+    ├── config.fish        # Configuração do Fish Shell
+    └── starship.toml      # Configuração do Starship
+```
+
+---
+
+## 📊 Logs
+
+Após a execução, um arquivo `install_log.txt` será gerado com:
+
+- ✅ Lista de instalações bem-sucedidas
+- ❌ Lista de falhas (se houver)
+- 📅 Data e hora da execução
+
+---
+
+## 🔍 Troubleshooting
+
+### Erro de permissão
+
+```bash
+# Certifique-se de NÃO usar sudo para executar o script
+./install.sh  # ✅ Correto
+sudo ./install.sh  # ❌ Errado
+```
+
+### Docker não funciona após instalação
+
+```bash
+# Reinicie o sistema ou faça logout/login
+sudo reboot
+```
+
+### Fish Shell não é o padrão
+
+```bash
+# Defina como shell padrão
+chsh -s /usr/bin/fish
+# Faça logout e login novamente
+```
+
+---
+
+## 🤝 Contribuindo
+
+Sinta-se à vontade para abrir issues ou pull requests!
+
+---
 
 ## 📝 Licença
 
-Este projeto está sob a licença MIT.
+MIT License - Sinta-se livre para usar e modificar.
+
+---
+
+## 👨‍💻 Autor
+
+**John Mota**
+
+---
+
+## 🎯 Roadmap
+
+- [ ] Adicionar suporte para Arch Linux
+- [ ] Criar versão para macOS
+- [ ] Adicionar opção de instalação seletiva
+- [ ] Criar interface interativa
+- [ ] Adicionar testes automatizados
+
+---
+
+**Feito com ❤️ para desenvolvedores Fullstack e DevOps**
