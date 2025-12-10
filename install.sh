@@ -135,14 +135,12 @@ main() {
     install_apt_package "zoxide"
 
      # Flatpak
-    print_status "Configurando Flatpak"
-    if {
-        install_apt_package "flatpak" &&
-        install_apt_package "gnome-software-plugin-flatpak" &&
-        flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-    }; then
-        print_success "Flatpak configurado com sucesso"
-
+    print_status "Verificando Flatpak"
+    
+    # Verifica se o Flatpak já está instalado e configurado
+    if command -v flatpak &> /dev/null && flatpak remotes | grep -q "flathub"; then
+        print_success "Flatpak já está configurado"
+        
         # Instalação de aplicativos Flatpak
         declare -a flatpak_apps=(
             "com.ktechpit.whatsie"
@@ -159,7 +157,26 @@ main() {
             install_flatpak "$app"
         done
     else
-        print_error "Falha na configuração do Flatpak"
+        print_status "Configurando Flatpak"
+        if {
+            install_apt_package "flatpak" &&
+            install_apt_package "gnome-software-plugin-flatpak" &&
+            flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+        }; then
+            print_success "Flatpak configurado com sucesso"
+
+            # Instalação de aplicativos Flatpak
+            declare -a flatpak_apps=(
+                "com.mattjakeman.ExtensionManager"
+                "io.dbeaver.DBeaverCommunity"
+            )
+
+            for app in "${flatpak_apps[@]}"; do
+                install_flatpak "$app"
+            done
+        else
+            print_error "Falha na configuração do Flatpak"
+        fi
     fi
 
     # Docker
@@ -209,6 +226,9 @@ main() {
     # VSCode
     install_deb_package "vscode" "https://go.microsoft.com/fwlink/?LinkID=760868"
 
+    # Discord
+    install_deb_package "discord" "https://discord.com/api/download?platform=linux&format=deb"
+
     # Mise
     print_status "Instalando Mise"
     if curl https://mise.run | sh; then
@@ -234,15 +254,6 @@ main() {
         print_error "Falha na instalação do Intellij-community"
     fi
 
-   
-
-    # Postman
-    print_status "Instalando Postman"
-    if sudo snap install postman; then
-        print_success "Postman instalado com sucesso"
-    else
-        print_error "Falha na instalação do Postman"
-    fi
 
     for package in "${dep_packages[@]}"; do
         if sudo dpkg -i "$package"; then
