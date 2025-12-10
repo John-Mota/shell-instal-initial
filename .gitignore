@@ -1,0 +1,30 @@
+# Logs
+install_log.txt
+*.log
+
+# Arquivos temporários
+*.tmp
+*.temp
+*.deb
+*.tar.gz
+*.zip
+
+# Diretórios de download
+aws/
+lazydocker/
+k9s/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
