@@ -518,6 +518,76 @@ install_brave_browser() {
     fi
 }
 
+install_flutter() {
+    print_status "Instalando Flutter SDK..."
+
+    # Dependências do Flutter (Linux)
+    local flutter_deps=(
+        "curl" "git" "unzip" "xz-utils" "zip" "libglu1-mesa"
+        "clang" "cmake" "ninja-build" "pkg-config" "libgtk-3-dev"
+    )
+
+    for dep in "${flutter_deps[@]}"; do
+        install_apt_package "$dep"
+    done
+
+    # Diretório de instalação (Local do usuário)
+    local dev_dir="$HOME/development"
+    local flutter_dir="$dev_dir/flutter"
+    mkdir -p "$dev_dir"
+
+    # Baixar/Atualizar Flutter
+    if [ -d "$flutter_dir" ]; then
+        print_warning "Diretório flutter já existe. Atualizando..."
+        cd "$flutter_dir" && git pull
+    else
+        print_status "Clonando repositório do Flutter (stable)..."
+        git clone https://github.com/flutter/flutter.git -b stable "$flutter_dir"
+    fi
+
+    # Configurar PATH e Variáveis
+    local flutter_bin="$flutter_dir/bin"
+    
+    # Adicionar ao PATH atual para uso imediato no script
+    export PATH="$PATH:$flutter_bin"
+    
+    # Persistir no .bashrc
+    if ! grep -q "flutter/bin" "$HOME/.bashrc"; then
+        echo -e "\n# Flutter SDK Configuration" >> "$HOME/.bashrc"
+        echo "export PATH=\"\$PATH:$flutter_bin\"" >> "$HOME/.bashrc"
+        echo "export CHROME_EXECUTABLE=\"/usr/bin/google-chrome-stable\"" >> "$HOME/.bashrc"
+    fi
+
+    # Persistir no config.fish
+    local fish_config="$HOME/.config/fish/config.fish"
+    if [ -f "$fish_config" ]; then
+        if ! grep -q "flutter/bin" "$fish_config"; then
+            echo -e "\n# Flutter SDK Configuration" >> "$fish_config"
+            echo "set -gx PATH \$PATH $flutter_bin" >> "$fish_config"
+            echo "set -gx CHROME_EXECUTABLE /usr/bin/google-chrome-stable" >> "$fish_config"
+        fi
+    fi
+
+    # Configurar diretório seguro no git
+    git config --global --add safe.directory "$flutter_dir"
+
+    # Precache de binários (downloads necessários)
+    print_status "Executando flutter precache..."
+    "$flutter_bin/flutter" precache
+
+    # Habilitar web
+    print_status "Habilitando suporte web..."
+    "$flutter_bin/flutter" config --enable-web
+    
+    # Tentar instalar extensão do Flutter no VSCode se o code estiver disponível
+    if command_exists code; then
+        print_status "Instalando extensões do VSCode para Flutter..."
+        code --install-extension dart-code.flutter --force
+        code --install-extension dart-code.dart-code --force
+    fi
+
+    print_success "Flutter SDK instalado e configurado"
+
 # ============================================
 # FUNÇÃO PRINCIPAL
 # ============================================
@@ -705,14 +775,23 @@ main() {
     # ============================================
     install_deb_package "vscode" "https://go.microsoft.com/fwlink/?LinkID=760868"
     install_deb_package "discord" "https://discord.com/api/download?platform=linux&format=deb"
+    install_deb_package "google-chrome-stable" "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 
+    # ============================================
+    # FLUTTER SDK
+    # ============================================
     # ============================================
     # SHELL & TERMINAL TOOLS
     # ============================================
+    install_starship
     install_mise
     install_brave_browser
     install_fzf
-    install_starship
+
+    # ============================================
+    # FLUTTER SDK
+    # ============================================
+    install_flutter
 
     # ============================================
     # RESUMO E PRÓXIMOS PASSOS

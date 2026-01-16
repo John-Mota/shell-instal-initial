@@ -3,11 +3,6 @@ if status is-interactive
 end
 set -U fish_greeting ""
 
-# PATH completo - PRECISA VIR ANTES DE TUDO
-#set -gx PATH /usr/local/bin /usr/bin /bin /usr/local/sbin /usr/sbin /sbin $HOME/bin $HOME/.local/bin $HOME/flutter/bin
-
-set -gx PATH /usr/local/bin /usr/bin /bin /usr/local/sbin /usr/sbin /sbin $HOME/bin $HOME/.local/bin $HOME/flutter/bin $HOME/.pub-cache/bin /usr/local/flutter/bin/cache/dart-sdk/bin
-
 # FZF (comente se não tiver instalado)
 if type -q fzf
     fzf --fish | source
