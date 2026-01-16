@@ -585,10 +585,11 @@ main() {
         "com.mattjakeman.ExtensionManager"
         "io.dbeaver.DBeaverCommunity"
         "io.github.brunofin.Cohesion"
-        "io.github.lainsce.Notejot"
         "com.discordapp.Discord"
         "md.obsidian.Obsidian"
-        "org.onlyoffice.desktopeditors"
+        "com.jetbrains.IntelliJ-IDEA-Community"
+        "io.github.ellie_commons.jorts"
+        "com.spotify.Client"
     )
 
     for app in "${flatpak_apps[@]}"; do
@@ -606,6 +607,9 @@ main() {
     install_apt_package "flameshot"
     install_apt_package "fonts-firacode"
     install_apt_package "gnome-tweaks"
+    install_apt_package "zoxide"
+    install_apt_package "eza"
+    install_apt_package "bat"
 
     # ============================================
     # POSTGRESQL
@@ -695,34 +699,6 @@ main() {
     install_lazydocker
     install_ctop
 
-    # ============================================
-    # ADDITIONAL DEV TOOLS (SNAP)
-    # ============================================
-    print_status "Instalando ferramentas via Snap..."
-    
-    # Postman
-    print_status "Instalando Postman..."
-    if sudo snap install postman; then
-        print_success "Postman instalado com sucesso"
-    else
-        print_error "Falha ao instalar Postman"
-    fi
-    
-    # Insomnia
-    print_status "Instalando Insomnia..."
-    if sudo snap install insomnia; then
-        print_success "Insomnia instalado com sucesso"
-    else
-        print_error "Falha ao instalar Insomnia"
-    fi
-    
-    # IntelliJ IDEA
-    print_status "Instalando IntelliJ IDEA Community..."
-    if sudo snap install intellij-idea-community --classic; then
-        print_success "IntelliJ IDEA Community instalado com sucesso"
-    else
-        print_error "Falha ao instalar IntelliJ IDEA Community"
-    fi
 
     # ============================================
     # DEB PACKAGES
