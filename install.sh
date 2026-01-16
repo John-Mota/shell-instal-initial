@@ -518,6 +518,36 @@ install_brave_browser() {
     fi
 }
 
+install_antigravity() {
+    print_status "Instalando Antigravity..."
+
+    # Garantir que diretório de chaves existe
+    sudo mkdir -p /etc/apt/keyrings
+    
+    local key_url="https://us-central1-apt.pkg.dev/doc/repo-signing-key.gpg"
+    local key_file="/etc/apt/keyrings/antigravity-repo-key.gpg"
+    local repo_entry="deb [signed-by=$key_file] https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev/ antigravity-debian main"
+    local repo_file="/etc/apt/sources.list.d/antigravity.list"
+
+    # Adicionar chave GPG
+    if curl -fsSL "$key_url" | sudo gpg --dearmor --yes -o "$key_file"; then
+        
+        # Adicionar repositório
+        echo "$repo_entry" | sudo tee "$repo_file" > /dev/null
+            
+        print_status "Atualizando repositórios..."
+        sudo apt-get update
+        
+        if sudo apt-get install -y antigravity; then
+            print_success "Antigravity instalado com sucesso"
+            return 0
+        fi
+    fi
+    
+    print_error "Falha ao instalar Antigravity"
+    return 1
+}
+
 install_flutter() {
     print_status "Instalando Flutter SDK..."
 
@@ -768,6 +798,11 @@ main() {
     
     install_lazydocker
     install_ctop
+
+    # ============================================
+    # ANTIGRAVITY
+    # ============================================
+    install_antigravity
 
 
     # ============================================
