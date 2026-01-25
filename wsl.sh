@@ -352,6 +352,93 @@ configure_shell_files() {
     fi
 }
 
+install_flutter() {
+    print_status "Instalando Flutter SDK..."
+
+    # Dependências do Flutter (Linux)
+    local flutter_deps=(
+        "curl" "git" "unzip" "xz-utils" "zip" "libglu1-mesa"
+        "clang" "cmake" "ninja-build" "pkg-config" "libgtk-3-dev"
+    )
+
+    for dep in "${flutter_deps[@]}"; do
+        install_apt_package "$dep"
+    done
+
+    # Diretório de instalação (Local do usuário)
+    local dev_dir="$HOME/development"
+    local flutter_dir="$dev_dir/flutter"
+    mkdir -p "$dev_dir"
+
+    # Baixar/Atualizar Flutter
+    if [ -d "$flutter_dir" ]; then
+        print_warning "Diretório flutter já existe. Atualizando..."
+        cd "$flutter_dir" && git pull
+    else
+        print_status "Clonando repositório do Flutter (stable)..."
+        git clone https://github.com/flutter/flutter.git -b stable "$flutter_dir"
+    fi
+
+    # Configurar PATH e Variáveis
+    local flutter_bin="$flutter_dir/bin"
+    
+    # Adicionar ao PATH atual para uso imediato no script
+    export PATH="$PATH:$flutter_bin"
+    
+    # Persistir no .bashrc
+    if ! grep -q "flutter/bin" "$HOME/.bashrc"; then
+        echo -e "\n# Flutter SDK Configuration" >> "$HOME/.bashrc"
+        echo "export PATH=\"\$PATH:$flutter_bin\"" >> "$HOME/.bashrc"
+    fi
+}
+
+# Função para configurar Flutter com Chrome do Windows no WSL
+configure_flutter_windows_chrome() {
+    print_status "Configurando Flutter para usar Chrome do Windows no WSL..."
+
+    # Caminho do Chrome no Windows (via /mnt/c)
+    local chrome_windows="/mnt/c/Program Files/Google/Chrome/Application/chrome.exe"
+
+    # Verificar se o Chrome está acessível
+    if [ -f "$chrome_windows" ]; then
+
+        # Configurar Flutter oficialmente
+        flutter config --enable-web >/dev/null 2>&1
+        flutter config --chrome-executable="$chrome_windows" >/dev/null 2>&1
+
+        # Configurar para bash
+        if ! grep -q "CHROME_EXECUTABLE" "$HOME/.bashrc" 2>/dev/null; then
+            {
+                echo ""
+                echo "# Flutter - Chrome do Windows"
+                echo "export CHROME_EXECUTABLE=\"$chrome_windows\""
+            } >> "$HOME/.bashrc"
+        fi
+
+        # Configurar para fish se existir
+        if [ -d "$HOME/.config/fish" ]; then
+            if ! grep -q "CHROME_EXECUTABLE" "$HOME/.config/fish/config.fish" 2>/dev/null; then
+                {
+                    echo ""
+                    echo "# Flutter - Chrome do Windows"
+                    echo "set -gx CHROME_EXECUTABLE \"$chrome_windows\""
+                } >> "$HOME/.config/fish/config.fish"
+            fi
+        fi
+
+        print_success "Flutter configurado para usar o Chrome do Windows"
+        print_status "Reabra o terminal ou execute: source ~/.bashrc"
+        print_status "Depois use: flutter run -d chrome"
+
+        return 0
+    else
+        print_warning "Chrome não encontrado em: $chrome_windows"
+        print_warning "Verifique se o Chrome está instalado no Windows"
+        return 1
+    fi
+}
+
+
 main() {
     # Verifica se está rodando como root
     if [ "$EUID" -eq 0 ]; then 
@@ -407,6 +494,12 @@ main() {
 
     # Instalar Mise
     install_mise
+
+    # Instalar Flutter SDK
+    install_flutter
+
+    # Configurar Flutter para usar Chrome do Windows
+    configure_flutter_windows_chrome
 
     # Configurar NODE_OPTIONS
     configure_node_options

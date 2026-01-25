@@ -21,6 +21,8 @@ print_error() {
     echo -e "${RED}[ERRO] $1${NC}"
 }
 
+
+
 main() {
     print_status "Configurando Mise para gerenciamento de versões..."
     

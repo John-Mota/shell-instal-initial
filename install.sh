@@ -587,6 +587,7 @@ install_flutter() {
         echo "export PATH=\"\$PATH:$flutter_bin\"" >> "$HOME/.bashrc"
         echo "export CHROME_EXECUTABLE=\"/usr/bin/google-chrome-stable\"" >> "$HOME/.bashrc"
     fi
+}
 
     # Persistir no config.fish
     local fish_config="$HOME/.config/fish/config.fish"
