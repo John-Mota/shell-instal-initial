@@ -41,6 +41,73 @@ command_exists() {
     command -v "$1" &> /dev/null
 }
 
+# Função para remover completamente o Snap
+remove_snap() {
+    print_status "Removendo Snap do sistema..."
+    
+    # Verificar se snapd está instalado
+    if ! command_exists snap; then
+        print_warning "Snap não está instalado no sistema"
+        return 0
+    fi
+    
+    # Listar e remover todos os snaps instalados (exceto core e snapd)
+    print_status "Removendo pacotes snap instalados..."
+    
+    # Remover snaps em ordem (primeiro os apps, depois core/snapd)
+    local snaps_to_remove
+    snaps_to_remove=$(snap list 2>/dev/null | awk 'NR>1 {print $1}' | grep -v "^core" | grep -v "^snapd" || true)
+    
+    for snap_pkg in $snaps_to_remove; do
+        print_status "Removendo snap: $snap_pkg"
+        sudo snap remove --purge "$snap_pkg" 2>/dev/null || true
+    done
+    
+    # Remover core snaps
+    local core_snaps
+    core_snaps=$(snap list 2>/dev/null | awk 'NR>1 {print $1}' | grep "^core" || true)
+    
+    for snap_pkg in $core_snaps; do
+        print_status "Removendo snap: $snap_pkg"
+        sudo snap remove --purge "$snap_pkg" 2>/dev/null || true
+    done
+    
+    # Remover snapd snap se existir
+    sudo snap remove --purge snapd 2>/dev/null || true
+    
+    # Parar serviços do snap
+    print_status "Parando serviços do Snap..."
+    sudo systemctl stop snapd.socket snapd.service 2>/dev/null || true
+    sudo systemctl disable snapd.socket snapd.service 2>/dev/null || true
+    sudo systemctl mask snapd.service 2>/dev/null || true
+    
+    # Remover pacotes snapd
+    print_status "Removendo pacote snapd..."
+    sudo apt-get remove --purge -y snapd gnome-software-plugin-snap 2>/dev/null || true
+    sudo apt-get autoremove -y 2>/dev/null || true
+    
+    # Remover diretórios do snap
+    print_status "Limpando diretórios do Snap..."
+    sudo rm -rf /snap
+    sudo rm -rf /var/snap
+    sudo rm -rf /var/lib/snapd
+    sudo rm -rf /var/cache/snapd
+    rm -rf ~/snap
+    
+    # Prevenir reinstalação do snap
+    print_status "Bloqueando reinstalação do Snap..."
+    sudo tee /etc/apt/preferences.d/nosnap.pref > /dev/null << 'EOF'
+# Prevenir instalação do snapd
+Package: snapd
+Pin: release a=*
+Pin-Priority: -10
+EOF
+    
+    print_success "Snap removido completamente do sistema"
+    print_success "Snap bloqueado de reinstalação via apt preferences"
+    return 0
+}
+
 # Função para adicionar GPG key de forma segura
 add_gpg_key() {
     local key_url=$1
@@ -548,6 +615,112 @@ install_antigravity() {
     return 1
 }
 
+install_intellij() {
+    print_status "Instalando IntelliJ IDEA Community Edition..."
+    
+    local install_dir="/opt/intellij-idea-community"
+    local temp_dir=$(mktemp -d)
+    local desktop_file="/usr/share/applications/intellij-idea-community.desktop"
+    
+    # Obter a versão mais recente da API da JetBrains
+    print_status "Obtendo versão mais recente do IntelliJ IDEA..."
+    local download_url
+    download_url=$(curl -s "https://data.services.jetbrains.com/products/releases?code=IIC&latest=true&type=release" | \
+        grep -oP '"linux":\{"link":"\K[^"]+' | head -1)
+    
+    if [ -z "$download_url" ]; then
+        # Fallback para URL padrão se a API falhar
+        print_warning "Não foi possível obter versão via API. Usando fallback..."
+        download_url="https://download.jetbrains.com/idea/ideaIC-2024.3.tar.gz"
+    fi
+    
+    print_status "Baixando IntelliJ IDEA de: $download_url"
+    
+    # Baixar o arquivo
+    if ! wget -O "$temp_dir/intellij.tar.gz" "$download_url"; then
+        print_error "Falha ao baixar IntelliJ IDEA"
+        rm -rf "$temp_dir"
+        return 1
+    fi
+    
+    # Remover instalação anterior se existir
+    if [ -d "$install_dir" ]; then
+        print_warning "Removendo instalação anterior do IntelliJ..."
+        sudo rm -rf "$install_dir"
+    fi
+    
+    # Extrair para diretório temporário
+    print_status "Extraindo IntelliJ IDEA..."
+    tar -xzf "$temp_dir/intellij.tar.gz" -C "$temp_dir"
+    
+    # Encontrar o diretório extraído (nome varia conforme versão)
+    local extracted_dir
+    extracted_dir=$(find "$temp_dir" -maxdepth 1 -type d -name "idea-IC-*" | head -1)
+    
+    if [ -z "$extracted_dir" ]; then
+        print_error "Não foi possível encontrar diretório extraído do IntelliJ"
+        rm -rf "$temp_dir"
+        return 1
+    fi
+    
+    # Mover para /opt
+    print_status "Instalando em $install_dir..."
+    sudo mv "$extracted_dir" "$install_dir"
+    
+    # Criar link simbólico para o executável
+    sudo ln -sf "$install_dir/bin/idea.sh" /usr/local/bin/idea
+    
+    # Criar arquivo .desktop para integração com o sistema
+    print_status "Criando ícone do IntelliJ IDEA..."
+    sudo tee "$desktop_file" > /dev/null << EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=IntelliJ IDEA Community Edition
+GenericName=Java IDE
+Comment=IDE para desenvolvimento Java, Kotlin, Groovy e outras linguagens
+Exec=$install_dir/bin/idea.sh %f
+Icon=$install_dir/bin/idea.svg
+Terminal=false
+Categories=Development;IDE;Java;
+StartupNotify=true
+StartupWMClass=jetbrains-idea-ce
+Keywords=IDE;Java;Kotlin;Development;JetBrains;IntelliJ;
+Actions=NewWindow;
+
+[Desktop Action NewWindow]
+Name=Nova Janela
+Exec=$install_dir/bin/idea.sh
+Icon=$install_dir/bin/idea.svg
+EOF
+    
+    # Atualizar banco de dados de aplicativos
+    sudo update-desktop-database /usr/share/applications 2>/dev/null || true
+    
+    # Adicionar ao PATH no .bashrc
+    if ! grep -q "intellij-idea" "$HOME/.bashrc" 2>/dev/null; then
+        echo -e "\n# IntelliJ IDEA" >> "$HOME/.bashrc"
+        echo "export PATH=\"\$PATH:$install_dir/bin\"" >> "$HOME/.bashrc"
+    fi
+    
+    # Adicionar ao PATH no config.fish se existir
+    local fish_config="$HOME/.config/fish/config.fish"
+    if [ -f "$fish_config" ]; then
+        if ! grep -q "intellij-idea" "$fish_config" 2>/dev/null; then
+            echo -e "\n# IntelliJ IDEA" >> "$fish_config"
+            echo "set -gx PATH \$PATH $install_dir/bin" >> "$fish_config"
+        fi
+    fi
+    
+    # Limpar arquivos temporários
+    rm -rf "$temp_dir"
+    
+    print_success "IntelliJ IDEA Community Edition instalado com sucesso"
+    print_success "Ícone criado em: $desktop_file"
+    print_success "Execute com: idea ou pelo menu de aplicativos"
+    return 0
+}
+
 install_flutter() {
     print_status "Instalando Flutter SDK..."
 
@@ -633,6 +806,11 @@ main() {
     print_status "Iniciando instalação do ambiente de desenvolvimento..."
     echo -e "${YELLOW}Este processo pode demorar vários minutos...${NC}"
 
+    # ============================================
+    # REMOVER SNAP (ANTES DE QUALQUER INSTALAÇÃO)
+    # ============================================
+    remove_snap
+
     # Atualização inicial do sistema
     print_status "Atualizando o sistema..."
     if sudo apt-get update && sudo apt-get upgrade -y; then
@@ -688,7 +866,6 @@ main() {
         "io.github.brunofin.Cohesion"
         "com.discordapp.Discord"
         "md.obsidian.Obsidian"
-        "com.jetbrains.IntelliJ-IDEA-Community"
         "io.github.ellie_commons.jorts"
         "com.spotify.Client"
     )
@@ -805,12 +982,14 @@ main() {
     # ============================================
     install_antigravity
 
-
+    # ============================================
+    # INTELLIJ IDEA
+    # ============================================
+    install_intellij
     # ============================================
     # DEB PACKAGES
     # ============================================
     install_deb_package "vscode" "https://go.microsoft.com/fwlink/?LinkID=760868"
-    install_deb_package "discord" "https://discord.com/api/download?platform=linux&format=deb"
     install_deb_package "google-chrome-stable" "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 
     # ============================================
