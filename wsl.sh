@@ -495,12 +495,6 @@ main() {
     # Instalar Mise
     install_mise
 
-    # Instalar Flutter SDK
-    install_flutter
-
-    # Configurar Flutter para usar Chrome do Windows
-    configure_flutter_windows_chrome
-
     # Configurar NODE_OPTIONS
     configure_node_options
 
