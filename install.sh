@@ -900,8 +900,7 @@ main() {
     print_status "Instalando clientes de banco de dados..."
     
     install_apt_package "redis-tools"
-    install_apt_package "mysql-client"
-    install_mongodb_client
+    install_apt_package "mysql-client"   
 
     # ============================================
     # PRODUCTIVITY TOOLS
@@ -989,7 +988,6 @@ main() {
     # ============================================
     # DEB PACKAGES
     # ============================================
-    install_deb_package "vscode" "https://go.microsoft.com/fwlink/?LinkID=760868"
     install_deb_package "google-chrome-stable" "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 
     # ============================================
@@ -1002,11 +1000,6 @@ main() {
     install_mise
     install_brave_browser
     install_fzf
-
-    # ============================================
-    # FLUTTER SDK
-    # ============================================
-    install_flutter
 
     # ============================================
     # RESUMO E PRÓXIMOS PASSOS
