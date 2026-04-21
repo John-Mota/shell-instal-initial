@@ -34,6 +34,14 @@ main() {
     
     print_success "Mise encontrado!"
     
+    # Java
+    print_status "Instalando Java 21 via Mise"
+    if mise use --global java@21; then
+        print_success "Java 21 instalado com sucesso"
+    else
+        print_error "Falha ao instalar Java"
+    fi
+    
     # Node.js
     print_status "Instalando Node.js LTS via Mise"
     if mise use --global node@lts; then
@@ -85,6 +93,10 @@ main() {
     # Verificar instalações
     print_status "Verificando versões instaladas..."
     echo ""
+    
+    if command -v java &> /dev/null; then
+        echo -e "${GREEN}Java:${NC} $(java --version 2>&1 | head -n 1)"
+    fi
     
     if command -v node &> /dev/null; then
         echo -e "${GREEN}Node.js:${NC} $(node --version)"

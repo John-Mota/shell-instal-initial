@@ -834,9 +834,7 @@ main() {
     install_apt_package "gnupg"
     install_apt_package "lsb-release"
     install_apt_package "ca-certificates"
-    
-    # Java
-    install_apt_package "openjdk-21-jdk"
+
     
     # Ferramentas CLI modernas
     install_apt_package "eza"
