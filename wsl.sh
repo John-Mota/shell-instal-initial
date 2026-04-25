@@ -438,6 +438,37 @@ configure_flutter_windows_chrome() {
     fi
 }
 
+# Função para configurar Antigravity
+configure_antigravity() {
+    print_status "Configurando Antigravity..."
+    
+    if [ -d "$HOME/.config/fish" ]; then
+        if ! grep -q "function antigravity" "$HOME/.config/fish/config.fish" 2>/dev/null; then
+            cat >> "$HOME/.config/fish/config.fish" << 'EOF'
+
+# Configuração do Antigravity
+set -gx WIN_USER "johnm"
+
+function antigravity
+    set -l exe "/mnt/c/Users/$WIN_USER/AppData/Local/Programs/antigravity/Antigravity.exe"
+    
+    if test -f "$exe"
+        set -l remote_uri "vscode-remote://wsl+Ubuntu"(pwd)
+        nohup "$exe" --folder-uri $remote_uri >/dev/null 2>&1 &
+        disown
+    else
+        echo "Erro: $exe não encontrado."
+    end
+end
+EOF
+            print_success "Antigravity configurado no config.fish"
+        else
+            print_warning "Antigravity já configurado no config.fish"
+        fi
+    else
+        print_warning "Diretório Fish não encontrado"
+    fi
+}
 
 main() {
     # Verifica se está rodando como root
@@ -491,6 +522,9 @@ main() {
 
     # Configurar arquivos do shell (config.fish e starship.toml)
     configure_shell_files
+
+    # Configurar Antigravity
+    configure_antigravity
 
     # Instalar Mise
     install_mise
